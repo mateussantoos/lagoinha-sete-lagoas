@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Lato, Bebas_Neue } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Lato,
+  Bebas_Neue,
+  Crimson_Text,
+} from "next/font/google";
 import { ThemeScript } from "@/providers/ThemeProvider";
 import "./globals.css";
+import { SmoothScroll } from "@/utils/SmoothScroll";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,6 +32,12 @@ const bebasNeue = Bebas_Neue({
   variable: "--font-bebas-neue",
 });
 
+const crimsonText = Crimson_Text({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-crimson-text",
+});
+
 export const metadata: Metadata = {
   title: "Lagoinha Sete Lagoas",
   description: "Igreja Batista da Lagoinha em Sete Lagoas",
@@ -41,8 +54,9 @@ export default function RootLayout({
         <ThemeScript />
       </head>
       <body
-        className={`bg-white dark:bg-black ${geistSans.variable} ${geistMono.variable} ${lato.variable} ${bebasNeue.variable} antialiased`}
+        className={`bg-white dark:bg-black ${geistSans.variable} ${geistMono.variable} ${lato.variable} ${bebasNeue.variable} ${crimsonText.variable} antialiased`}
       >
+        <SmoothScroll />
         {children}
       </body>
     </html>
