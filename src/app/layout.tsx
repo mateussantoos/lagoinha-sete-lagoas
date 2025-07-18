@@ -4,6 +4,7 @@ import {
   Geist_Mono,
   Lato,
   Bebas_Neue,
+  Crimson_Pro,
   Crimson_Text,
 } from "next/font/google";
 import { ThemeScript } from "@/providers/ThemeProvider";
@@ -38,6 +39,12 @@ const crimsonText = Crimson_Text({
   variable: "--font-crimson-text",
 });
 
+const crimsonPro = Crimson_Pro({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-crimson-pro",
+});
+
 export const metadata: Metadata = {
   title: "Lagoinha Sete Lagoas",
   description: "Igreja Batista da Lagoinha em Sete Lagoas",
@@ -54,7 +61,7 @@ export default function RootLayout({
         <ThemeScript />
       </head>
       <body
-        className={`bg-white dark:bg-black ${geistSans.variable} ${geistMono.variable} ${lato.variable} ${bebasNeue.variable} ${crimsonText.variable} antialiased`}
+        className={`bg-white dark:bg-black ${geistSans.variable} ${geistMono.variable} ${lato.variable} ${bebasNeue.variable} ${crimsonText.variable} ${crimsonPro.variable} antialiased`}
       >
         <SmoothScroll />
         {children}

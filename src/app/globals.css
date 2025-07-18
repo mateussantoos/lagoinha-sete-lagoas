@@ -5,11 +5,25 @@
   --font-lato: Lato, sans-serif;
   --font-bebas: Bebas Neue, sans-serif;
   --font-agrandir: Agrandir Grand Heavy, sans-serif;
+  --font-crimson-pro: Crimson Pro, sans-serif;
+  --font-crimson-text: Crimson Text, serif;
+  --font-crimson-pro-italic: Crimson Pro, sans-serif;
 
   /* Paleta de Cores */
   --color-primary: #eab308; /* amarelo ouro*/
   --color-secondary: #1e293b; /*  cinza padrão*/
   --color-background: #f8fafc; /* cinza claro*/
+}
+
+::selection {
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+  -webkit-tap-highlight-color: var(--color-primary);
+}
+
+::-moz-selection {
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
 }
 
 @custom-variant dark (&:where(.dark, .dark *));

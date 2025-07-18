@@ -59,8 +59,8 @@ export const Navbar = () => {
   }, []);
 
   return (
-    // AQUI ESTÁ A MUDANÇA PRINCIPAL: de 'fixed' para 'sticky' e com fundo sólido.
-    <header className="sticky top-0 left-0 w-full z-50 ">
+    // AQUI ESTÁ A MUDANÇA: 'lg:pt-0' foi trocado por 'md:pt-0'
+    <header className="sticky top-0 left-0 w-full z-50  pt-4 md:pt-0">
       {/* ===== BARRA SUPERIOR (some ao rolar) ===== */}
       <div
         className={`transition-all duration-300 ease-in-out ${
@@ -69,7 +69,7 @@ export const Navbar = () => {
             : "translate-y-0 opacity-100"
         }`}
       >
-        <div className="hidden sm:flex max-w-screen-2xl mx-auto px-9 sm:px-20 lg:px-20 border-b border-neutral-200/50 dark:border-neutral-800/50 justify-between items-center py-2">
+        <div className="hidden sm:flex max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-neutral-200/50 dark:border-neutral-800/50 justify-between items-center py-2">
           <div className="text-sm text-neutral-700 dark:text-neutral-300 font-light h-6 overflow-hidden font-lato">
             <AnimatePresence mode="wait">
               <motion.div
@@ -110,17 +110,13 @@ export const Navbar = () => {
       </div>
 
       {/* ===== CONTAINER DA NAVBAR PRINCIPAL ===== */}
-      <div
-        className={`relative  transition-all duration-300 ease-in-out ${
-          isScrolled ? "px-4 top-5" : "px-0"
-        }`}
-      >
+      <div className={`relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8`}>
         <nav
-          className={`flex items-center justify-between max-w-screen-2xl mx-auto transition-all duration-300 ease-in-out
+          className={`flex items-center justify-between transition-all duration-300 ease-in-out
             ${
               isScrolled
-                ? "mt-4 bg-white/80 dark:bg-black/80 dark:border-1 dark:border-white/10  backdrop-blur-lg shadow-lg rounded-full py-2 px-6"
-                : "bg-transparent py-4 px-9 sm:px-20 lg:px-20"
+                ? "mt-4 bg-white/80 dark:bg-black/80 backdrop-blur-lg shadow-lg rounded-full py-2 px-6"
+                : "bg-transparent py-4"
             }`}
         >
           {/* Logo */}
@@ -169,7 +165,7 @@ export const Navbar = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden mt-2 max-w-screen-2xl mx-auto bg-white/95 dark:bg-black/95 backdrop-blur-lg shadow-lg rounded-3xl"
+              className="absolute left-0 right-0 mt-2 mx-4 sm:mx-6 lg:mx-8 bg-white/95 dark:bg-black/95 backdrop-blur-lg shadow-lg rounded-3xl lg:hidden"
             >
               <ul className="flex flex-col space-y-4 p-6 font-bebas text-lg tracking-widest text-neutral-800 dark:text-neutral-100">
                 {sections.map((sec) => (
