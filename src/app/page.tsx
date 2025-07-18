@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <main className="mt-16">
+      <main>
         <Banner />
         <div className="h-screen"></div>
       </main>
