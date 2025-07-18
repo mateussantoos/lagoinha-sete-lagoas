@@ -59,7 +59,6 @@ export const Navbar = () => {
   }, []);
 
   return (
-    // AQUI ESTÁ A MUDANÇA: 'lg:pt-0' foi trocado por 'md:pt-0'
     <header className="sticky top-0 left-0 w-full z-50  pt-4 md:pt-0">
       {/* ===== BARRA SUPERIOR (some ao rolar) ===== */}
       <div
@@ -115,7 +114,7 @@ export const Navbar = () => {
           className={`flex items-center justify-between transition-all duration-300 ease-in-out
             ${
               isScrolled
-                ? "mt-4 bg-white/80 dark:bg-black/80 backdrop-blur-lg shadow-lg rounded-full py-2 px-6"
+                ? "mt-4 bg-white/80 dark:bg-black/80 dark:border-1 dark:border-white/10 backdrop-blur-lg shadow-lg rounded-full py-2 px-6"
                 : "bg-transparent py-4"
             }`}
         >
