@@ -28,7 +28,7 @@ const imageVariants: Variants = {
 
 export const AboutUs = () => {
   return (
-    <section className="py-16 md:py-24 mt-45">
+    <section className="py-16 md:py-24 mt-20 lg:mt-45">
       <motion.div
         className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8"
         initial="hidden"
@@ -38,7 +38,7 @@ export const AboutUs = () => {
       >
         <div className="rounded-2xl bg-stone-100 dark:bg-neutral-900 flex flex-col-reverse lg:flex-row justify-center items-center p-6 md:p-12 lg:p-0 gap-12">
           {/* --- Coluna de Texto (Esquerda) --- */}
-          <div className="w-full lg:w-9/20 lg:pl-16 text-center lg:text-left -translate-y-22 ">
+          <div className="w-full lg:w-9/20 lg:pl-16 text-left  lg:text-left -translate-y-22 ">
             <motion.h1
               className="font-bebas text-5xl sm:text-6xl lg:text-7xl xl:text-8xl leading-none  text-neutral-800 tracking-tighter dark:text-neutral-100"
               variants={itemVariants}
@@ -56,7 +56,7 @@ export const AboutUs = () => {
               <i className="italic">pequena para se importar</i>
             </motion.h2>
             <motion.p
-              className="font-lato text-gray-800 dark:text-gray-300 leading-snug text-base md:text-lg tracking-wide max-w-lg mx-auto lg:mx-0 mb-8"
+              className="font-lato text-gray-800 dark:text-gray-300 leading-snug text-base md:text-lg tracking-wide max-w-lg mx-auto lg:mx-0 mb-8 text-justify lg:text-left"
               variants={itemVariants}
             >
               Somos uma extensão da Igreja Batista da Lagoinha, um lugar para
@@ -64,7 +64,7 @@ export const AboutUs = () => {
               amor e a esperança de Jesus em cada rua e em cada lar.
             </motion.p>
             <motion.p
-              className="font-lato text-gray-800 dark:text-gray-300 leading-snug text-base md:text-lg tracking-wide max-w-lg mx-auto lg:mx-0 mb-8"
+              className="font-lato text-gray-800 dark:text-gray-300 leading-snug text-base md:text-lg tracking-wide max-w-lg mx-auto lg:mx-0 mb-8 text-justify lg:text-left"
               variants={itemVariants}
             >
               Nosso coração é viver como uma família unida em fé e amor.
@@ -84,7 +84,7 @@ export const AboutUs = () => {
 
           {/* --- Coluna da Imagem (Direita) --- */}
           <motion.div
-            className="w-full lg:w-9/20 aspect-square lg:-translate-y-10"
+            className="w-full lg:w-9/20 aspect-square lg:-translate-y-10 -translate-y-15"
             variants={imageVariants}
           >
             <div className="relative w-full h-full overflow-hidden rounded-lg">

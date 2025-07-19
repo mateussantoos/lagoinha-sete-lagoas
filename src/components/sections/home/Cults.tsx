@@ -48,7 +48,7 @@ const scheduleVariants: Variants = {
 
 export const Cults = () => {
   return (
-    <section className="py-24 bg-white dark:bg-black">
+    <section className="my-20 bg-white dark:bg-black">
       <motion.div
         className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8"
         initial="hidden"
