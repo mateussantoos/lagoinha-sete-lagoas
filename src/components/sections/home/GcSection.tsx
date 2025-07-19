@@ -54,9 +54,9 @@ const floatingCardVariants: Variants = {
 
 export const GcSection = () => {
   return (
-    <section className=" bg-stone-100 dark:bg-neutral-900 pt-32 pb-16  lg:mt-45 md:py-5 relative">
+    <section className=" bg-stone-100 dark:bg-neutral-900 mt-40 pb-5 lg:mt-45 md:py-5 relative">
       <motion.div
-        className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row justify-center items-center gap-16 lg:gap-24"
+        className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row justify-center items-center gap-16 lg:gap-24 -translate-y-10 md:translate-y-0"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
@@ -138,16 +138,16 @@ export const GcSection = () => {
 
         {/* --- Coluna de Texto (Direita) --- */}
         <motion.div
-          className="w-full lg:w-8/12 text-center lg:text-left md:pl-40 -translate-y-12"
+          className="w-full lg:w-8/12  lg:text-left md:pl-40 -translate-y-12"
           variants={itemVariants}
         >
-          <h2 className="font-bebas text-5xl sm:text-6xl md:text-7xl leading-none tracking-tighter text-neutral-800 dark:text-neutral-100 mb-4 ">
+          <h2 className="font-bebas text-4xl sm:text-6xl md:text-7xl leading-none tracking-tighter text-neutral-800 dark:text-neutral-100 mb-4 ">
             Encontre um GC <i className=" font-crimson-text">Para você</i>
           </h2>
           <span className="font-lato font-bold text-sm tracking-widest uppercase text-primary mb-2 inline-block">
             Comunhão e Crescimento
           </span>
-          <p className="font-lato text-neutral-600 dark:text-neutral-400 text-base md:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed mb-8">
+          <p className="font-lato text-neutral-600 dark:text-neutral-400  lg:text-left text-base md:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed mb-8">
             Os Grupos de Crescimento (GCs) são a igreja se reunindo nos lares
             durante a semana. É um ambiente de comunhão, cuidado mútuo e
             aprofundamento na Palavra. Temos GCs espalhados por toda Sete Lagoas
