@@ -27,7 +27,7 @@ export const Banner = () => {
   return (
     <section>
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative aspect-[16/16] lg:aspect-[21/11] rounded-2xl">
+        <div className="relative aspect-[16/28] lg:aspect-[21/11] rounded-2xl">
           <div className="absolute inset-0 w-full h-full overflow-hidden rounded-2xl">
             <motion.div
               className="w-full h-full"
@@ -46,7 +46,7 @@ export const Banner = () => {
             </motion.div>
           </div>
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-2xl"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-transparent to-transparent rounded-2xl"></div>
 
           <motion.div
             className="relative z-10 flex flex-col justify-end lg:justify-end h-full p-6 md:p-12 text-white"

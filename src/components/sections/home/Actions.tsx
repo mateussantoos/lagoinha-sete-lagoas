@@ -58,13 +58,10 @@ const itemVariants: Variants = {
 };
 
 export const Actions = () => {
-  // Lógica para criar uma lista única com todos os itens do grid
-  const gridItems = actionsData.flatMap((action, index) => {
-    const isLastItem = index === actionsData.length - 1;
-
+  const gridItems = actionsData.flatMap((action) => {
     const textBlock = (
       <motion.div
-        key={`${action.title}-text`} // Key única
+        key={`${action.title}-text`}
         className={`bg-stone-100 dark:bg-neutral-900 p-8 sm:p-12 flex flex-col justify-center`}
         variants={itemVariants}
       >
@@ -87,7 +84,7 @@ export const Actions = () => {
     if (action.imageSrc) {
       const imageBlock = (
         <motion.div
-          key={`${action.title}-image`} // Key única
+          key={`${action.title}-image`}
           className="relative aspect-square"
           variants={itemVariants}
         >
@@ -100,10 +97,8 @@ export const Actions = () => {
           />
         </motion.div>
       );
-      // Retorna ambos como itens separados na lista
       return [textBlock, imageBlock];
     }
-    // Retorna apenas o bloco de texto se não houver imagem
     return [textBlock];
   });
 

@@ -7,6 +7,7 @@ import { Actions } from "@/components/sections/home/Actions";
 import { Youtube } from "@/components/sections/home/Youtube";
 import { Faq } from "@/components/sections/home/Faq";
 import { ClubCast } from "@/components/sections/home/ClubCast";
+import { Footer } from "@/components/ui/Footer";
 
 export default function Home() {
   return (
@@ -22,6 +23,7 @@ export default function Home() {
         <ClubCast />
         <Faq />
       </main>
+      <Footer />
     </>
   );
 }

@@ -13,7 +13,7 @@ const cultos = [
   {
     dia: "Quinta-feira",
     horarios: "19:30h",
-    titulo: "Culta Fé",
+    titulo: "Culto Fé",
   },
   {
     dia: "Sexta-feira",
