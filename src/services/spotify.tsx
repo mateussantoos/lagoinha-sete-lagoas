@@ -1,13 +1,14 @@
 import axios from "axios";
 import qs from "qs";
 
-const clientId = "072a05a59b3a41b58040e0b9289c7e72";
-const clientSecret = "c625665c7a30400092a504fbbab75775";
-const showId = "5x0MX89vtXZtAwJIwD8qMO";
+const clientId = process.env.SPOTIFY_CLIENT_ID;
+const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+const showId = process.env.SPOTIFY_SHOW_ID;
 
+// Função para obter o token de acesso da API do Spotify
 async function getAccessToken(): Promise<string> {
   const res = await axios.post(
-    "https://accounts.spotify.com/api/token",
+    "https://accounts.spotify.com/api/token", // URL CORRETA AQUI
     qs.stringify({ grant_type: "client_credentials" }),
     {
       headers: {
@@ -19,11 +20,12 @@ async function getAccessToken(): Promise<string> {
   return res.data.access_token;
 }
 
+// Função que o seu componente vai chamar
 export async function getPodcastEpisodes() {
   const token = await getAccessToken();
 
   const res = await axios.get(
-    `https://api.spotify.com/v1/shows/${showId}?market=BR`,
+    `https://api.spotify.com/v1/shows/${showId}/episodes?market=BR`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -31,5 +33,6 @@ export async function getPodcastEpisodes() {
     }
   );
 
-  return res.data.episodes.items; // retorna apenas os episódios
+  // A API do Spotify retorna os episódios dentro de 'items'
+  return res.data.items;
 }

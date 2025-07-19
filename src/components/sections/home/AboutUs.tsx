@@ -38,9 +38,9 @@ export const AboutUs = () => {
       >
         <div className="rounded-2xl bg-stone-100 dark:bg-neutral-900 flex flex-col-reverse lg:flex-row justify-center items-center p-6 md:p-12 lg:p-0 gap-12">
           {/* --- Coluna de Texto (Esquerda) --- */}
-          <div className="w-full lg:w-9/20 lg:pl-16 text-left  lg:text-left -translate-y-22 ">
+          <div className="w-full lg:w-9/20 lg:pl-16 text-left  lg:text-left ">
             <motion.h1
-              className="font-bebas text-5xl sm:text-6xl lg:text-7xl xl:text-8xl leading-none  text-neutral-800 tracking-tighter dark:text-neutral-100"
+              className="font-bebas text-5xl sm:text-6xl lg:text-7xl xl:text-8xl leading-none  text-neutral-800 tracking-tighter dark:text-neutral-100  -translate-y-22"
               variants={itemVariants}
             >
               Sobre{" "}
@@ -49,7 +49,7 @@ export const AboutUs = () => {
               </span>
             </motion.h1>
             <motion.h2
-              className="font-crimson-text text-4xl sm:text-5xl lg:text-6xl tracking-tighter mb-4 leading-none text-neutral-700 dark:text-neutral-200"
+              className="font-crimson-text text-4xl sm:text-5xl lg:text-6xl tracking-tighter mb-4 leading-none text-neutral-700 dark:text-neutral-200  -translate-y-20"
               variants={itemVariants}
             >
               Grande para servir e{" "}

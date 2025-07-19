@@ -6,13 +6,12 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 // --- DADOS DA SEÇÃO ---
-// Este é o "centro de controle". Edite aqui para alterar o conteúdo dos cards.
 const actionsData = [
   {
     title: "Culto de Jovens",
     description:
       "Um encontro vibrante preparado para a juventude, com louvor, palavra e muita comunhão. Acontece quinzenalmente.",
-    imageSrc: "/images/actions/webp/img01.webp", // Coloque suas imagens em public/images/actions/
+    imageSrc: "/images/actions/webp/img01.webp",
     link: "/jovens",
   },
   {
@@ -59,8 +58,57 @@ const itemVariants: Variants = {
 };
 
 export const Actions = () => {
+  // Lógica para criar uma lista única com todos os itens do grid
+  const gridItems = actionsData.flatMap((action, index) => {
+    const isLastItem = index === actionsData.length - 1;
+
+    const textBlock = (
+      <motion.div
+        key={`${action.title}-text`} // Key única
+        className={`bg-stone-100 dark:bg-neutral-900 p-8 sm:p-12 flex flex-col justify-center`}
+        variants={itemVariants}
+      >
+        <h3 className="font-bebas text-3xl sm:text-4xl uppercase tracking-wider text-neutral-800 dark:text-neutral-100">
+          {action.title}
+        </h3>
+        <p className="font-lato mt-4 mb-6 text-neutral-600 dark:text-neutral-400 leading-relaxed">
+          {action.description}
+        </p>
+        <Link
+          href={action.link}
+          className="group font-bebas text-lg uppercase text-primary hover:text-primary/80 transition-colors flex items-center gap-2"
+        >
+          Conheça
+          <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+        </Link>
+      </motion.div>
+    );
+
+    if (action.imageSrc) {
+      const imageBlock = (
+        <motion.div
+          key={`${action.title}-image`} // Key única
+          className="relative aspect-square"
+          variants={itemVariants}
+        >
+          <Image
+            src={action.imageSrc}
+            alt={`Imagem para ${action.title}`}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 33vw"
+          />
+        </motion.div>
+      );
+      // Retorna ambos como itens separados na lista
+      return [textBlock, imageBlock];
+    }
+    // Retorna apenas o bloco de texto se não houver imagem
+    return [textBlock];
+  });
+
   return (
-    <section className="py-24 bg-white dark:bg-black md:mt-20 lg:mt-45 ">
+    <section className="py-24 bg-white dark:bg-black md:mt-20 lg:mt-45">
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -86,62 +134,8 @@ export const Actions = () => {
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
         >
-          {actionsData.map((action, index) => {
-            const textBlock = (
-              <motion.div
-                key={`${action.title}-text`}
-                className="bg-stone-100 dark:bg-neutral-900 w- p-8 sm:p-12 flex flex-col justify-center"
-                variants={itemVariants}
-              >
-                <h3 className="font-bebas text-3xl sm:text-4xl uppercase tracking-wider text-neutral-800 dark:text-neutral-100">
-                  {action.title}
-                </h3>
-                <p className="font-lato mt-4 mb-6 text-neutral-600 dark:text-neutral-400 leading-relaxed">
-                  {action.description}
-                </p>
-                <Link
-                  href={action.link}
-                  className="group font-bebas text-lg uppercase text-primary hover:text-primary/80 transition-colors flex items-center gap-2"
-                >
-                  Conheça
-                  <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-                </Link>
-              </motion.div>
-            );
-
-            const imageBlock = action.imageSrc && (
-              <motion.div
-                key={`${action.title}-image`}
-                className="relative aspect-square"
-                variants={itemVariants}
-              >
-                <Image
-                  src={action.imageSrc}
-                  alt={`Imagem para ${action.title}`}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-              </motion.div>
-            );
-
-            // Lógica para alternar a ordem dos blocos
-            if (index % 1 === 0) {
-              return (
-                <>
-                  {textBlock}
-                  {imageBlock}
-                </>
-              );
-            } else {
-              return (
-                <>
-                  {imageBlock}
-                  {textBlock}
-                </>
-              );
-            }
-          })}
+          {/* Renderiza a lista de itens já processada */}
+          {gridItems}
         </motion.div>
       </div>
     </section>
