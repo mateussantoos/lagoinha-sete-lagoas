@@ -35,7 +35,7 @@ export const Youtube = () => {
         const response = await fetch("/api/youtube");
         if (!response.ok) throw new Error("Falha ao buscar os vídeos.");
         const data = await response.json();
-        setVideos(data.videos || []);
+        setVideos(data.recentVideos || []);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Erro desconhecido");
       } finally {
