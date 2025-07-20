@@ -69,7 +69,7 @@ export const Footer = () => {
               <input
                 type="email"
                 placeholder="Seu melhor e-mail"
-                className="w-full px-4 py-2 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-md focus:ring-2 focus:ring-primary focus:outline-none font-lato"
+                className="w-full px-4 py-2 bg-white dark:bg-neutral-800 dark:text-neutral-100 border border-neutral-300 dark:border-neutral-700 rounded-md focus:ring-2 focus:ring-primary focus:outline-none font-lato"
               />
               <button
                 type="submit"

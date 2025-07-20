@@ -37,7 +37,7 @@ export const AboutUs = () => {
         viewport={{ once: true, amount: 0.3 }}
         variants={containerVariants}
       >
-        <div className="rounded-2xl bg-stone-100 dark:bg-neutral-900 flex flex-col-reverse lg:flex-row justify-center items-center p-6 md:p-12 lg:p-0 gap-12">
+        <div className="rounded-2xl bg-secondary-light dark:bg-secondary-dark flex flex-col-reverse lg:flex-row justify-center items-center p-6 md:p-12 lg:p-0 gap-12">
           {/* --- Coluna de Texto (Esquerda) --- */}
           <div className="w-full lg:w-9/20 lg:pl-16 text-left  lg:text-left ">
             <motion.h1
