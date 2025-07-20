@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { motion, Variants } from "framer-motion";
 import ImageLagoinha from "@/assets/webp/img01.webp";
+import { Button } from "@/components/common/Button";
 
 // --- Variantes de Animação ---
 const containerVariants: Variants = {
@@ -73,12 +74,7 @@ export const AboutUs = () => {
             </motion.p>
 
             <motion.div variants={itemVariants}>
-              <a
-                href="#contato"
-                className="inline-block bg-primary hover:bg-primary/90 text-white font-bold py-3 px-8 rounded-full transition-colors duration-300 text-base md:text-lg"
-              >
-                Nossa História
-              </a>
+              <Button href="#contato" text="Nossa História" />
             </motion.div>
           </div>
 

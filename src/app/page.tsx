@@ -8,6 +8,7 @@ import { Youtube } from "@/components/sections/home/Youtube";
 import { Faq } from "@/components/sections/home/Faq";
 import { ClubCast } from "@/components/sections/home/ClubCast";
 import { Footer } from "@/components/ui/Footer";
+import { Marquee } from "@/components/sections/home/Marquee";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <main>
         <Banner />
         <AboutUs />
+        <Marquee />
         <Cults />
         <GcSection />
         <Actions />

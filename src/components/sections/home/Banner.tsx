@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@/components/common/Button";
 import { motion, Variants } from "framer-motion";
 import { useState, useEffect } from "react";
 
@@ -138,13 +139,7 @@ export const Banner = () => {
               em Sete Lagoas e no mundo.
             </motion.p>
             <motion.div className="mt-4 md:mt-8" variants={textItemVariants}>
-              <a
-                href="#contato"
-                className="inline-block bg-primary hover:bg-primary/90 text-white font-bold text-[1vw] md:text-[1.2vw] py-2 px-4 md:py-3 md:px-6 rounded-full transition-colors duration-300"
-                style={{ fontSize: "clamp(0.7rem, 1.2vw, 1rem)" }}
-              >
-                Participe Conosco
-              </a>
+              <Button href="#contato" text="Participe Conosco" arrow={false} />
             </motion.div>
           </motion.div>
         </div>

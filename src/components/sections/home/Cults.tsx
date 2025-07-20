@@ -1,6 +1,6 @@
 "use client";
 import { motion, Variants } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/common/Button";
 
 // --- DADOS DOS CULTOS ---
 // Edite aqui para adicionar, remover ou alterar os horários facilmente
@@ -73,14 +73,9 @@ export const Cults = () => {
               Você e sua família são nossos convidados especiais para celebrar e
               adorar a Deus conosco. Encontre um horário e venha nos visitar.
             </motion.p>
-            <motion.a
-              href="#contato"
-              className="inline-flex items-center mt-8 bg-primary hover:bg-primary/90 text-white font-bold py-3 px-6 rounded-full transition-colors duration-300 text-base"
-              variants={textVariants}
-            >
-              Como Chegar
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </motion.a>
+            <motion.div variants={textVariants} className="mt-8">
+              <Button href="#contato" text="Como Chegar" arrow={true} />
+            </motion.div>
           </div>
 
           {/* --- Coluna da Lista de Horários (Direita) --- */}

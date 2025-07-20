@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, Variants } from "framer-motion";
-import { PlayCircle, ArrowRight, X } from "lucide-react";
+import { PlayCircle, X } from "lucide-react";
+import { Button } from "@/components/common/Button";
 
 // Tipo para vídeos
 interface Video {
@@ -137,16 +138,12 @@ export const Youtube = () => {
             </motion.div>
           )}
 
-          <motion.div className="text-center mt-12">
-            <a
+          <motion.div className="flex justify-center mt-12">
+            <Button
               href="https://www.youtube.com/@lagoinhasetelagoas7913"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center bg-primary hover:bg-primary/90 text-white font-bold py-2 px-6 sm:py-3 sm:px-8 rounded-full transition-colors duration-300 text-[clamp(0.9rem,1.2vw,1.1rem)]"
-            >
-              Ver todos no YouTube
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </a>
+              text="Ver todos no YouTube"
+              arrow={true}
+            />
           </motion.div>
         </div>
       </section>

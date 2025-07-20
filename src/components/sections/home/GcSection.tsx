@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/common/Button";
 import { motion, Variants } from "framer-motion";
 import { Phone, MapPin, MessageSquare, Map as MapIcon } from "lucide-react";
 
@@ -153,14 +154,12 @@ export const GcSection = () => {
             aprofundamento na Palavra. Temos GCs espalhados por toda Sete Lagoas
             e região, e um deles é perfeito para você.
           </p>
-          <a
-            href="/mapa-gcs" // Você precisará criar essa página depois
-            className="inline-flex items-center bg-neutral-800 hover:bg-neutral-700 dark:bg-neutral-100 dark:hover:bg-neutral-200 text-white dark:text-black font-bold py-4 px-8 rounded-full transition-colors duration-300 group"
-            aria-label="Ver mapa dos Grupos de Crescimento"
-          >
-            <MapIcon className="w-5 h-5 mr-2 transition-transform duration-300 group-hover:scale-110" />
-            Mapa de GCs
-          </a>
+          <Button
+            href="/mapa-gcs"
+            text="Mapa de GCs"
+            icon={<MapIcon />}
+            arrow={false}
+          />
         </motion.div>
       </motion.div>
     </section>
