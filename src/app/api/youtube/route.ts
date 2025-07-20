@@ -1,4 +1,3 @@
-// Exemplo de código para buscar os últimos vídeos de um canal
 import { google } from "googleapis";
 import { NextResponse } from "next/server";
 
@@ -9,32 +8,51 @@ export async function GET() {
   });
 
   const channelId = "UCyzR30utxr1WnY9zuLHXXew";
-  const uploadsPlaylistId = channelId.replace(/^UC/, "UU");
-
   try {
-    const response = await youtube.playlistItems.list({
+    const uploadsPlaylistId = channelId.replace(/^UC/, "UU");
+    const playlistResponse = await youtube.playlistItems.list({
       part: ["snippet"],
       playlistId: uploadsPlaylistId,
-      maxResults: 10,
+      maxResults: 5,
     });
 
-    const videos = response.data.items?.map((item) => {
-      const snippet = item.snippet;
-      const videoId = snippet?.resourceId?.videoId;
-      return {
-        title: snippet?.title,
-        description: snippet?.description,
-        thumbnail: snippet?.thumbnails?.high?.url,
-        videoId: videoId,
-        url: `https://www.youtube.com/watch?v=${videoId}`,
-      };
+    const videoIds =
+      playlistResponse.data.items
+        ?.map((item) => item.snippet?.resourceId?.videoId)
+        .filter((id): id is string => !!id) ?? [];
+
+    if (videoIds.length === 0) {
+      return NextResponse.json({ isLive: false, liveVideo: null });
+    }
+
+    const videosResponse = await youtube.videos.list({
+      part: ["snippet", "liveStreamingDetails"],
+      id: videoIds,
     });
 
-    return NextResponse.json({ videos });
+    const liveVideo = videosResponse.data.items?.find(
+      (video) =>
+        video.liveStreamingDetails &&
+        video.liveStreamingDetails.actualStartTime &&
+        !video.liveStreamingDetails.actualEndTime
+    );
+
+    if (liveVideo && liveVideo.id) {
+      return NextResponse.json({
+        isLive: true,
+        liveVideo: {
+          videoId: liveVideo.id,
+          title: liveVideo.snippet?.title,
+          url: `https://www.youtube.com/watch?v=${liveVideo.id}`,
+        },
+      });
+    }
+
+    return NextResponse.json({ isLive: false, liveVideo: null });
   } catch (error) {
     console.error("Erro ao buscar vídeos do YouTube:", error);
     return NextResponse.json(
-      { error: "Erro ao buscar vídeos" },
+      { error: "Erro ao buscar vídeos", isLive: false },
       { status: 500 }
     );
   }

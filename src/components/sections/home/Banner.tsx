@@ -1,6 +1,15 @@
 "use client";
 import { motion, Variants } from "framer-motion";
+import { useState, useEffect } from "react";
 
+// Definindo a interface para os dados do vídeo ao vivo
+interface LiveVideo {
+  videoId: string;
+  title: string;
+  url: string;
+}
+
+// Variantes de animação para os textos do banner padrão
 const textContainerVariants: Variants = {
   hidden: {},
   visible: {
@@ -24,6 +33,64 @@ const textItemVariants: Variants = {
 };
 
 export const Banner = () => {
+  const [liveVideo, setLiveVideo] = useState<LiveVideo | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const checkLiveStatus = async () => {
+      try {
+        const response = await fetch("/api/youtube");
+        const data = await response.json();
+        if (data.isLive) {
+          setLiveVideo(data.liveVideo);
+        }
+      } catch (error) {
+        console.error("Não foi possível checar o status da live:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkLiveStatus();
+  }, []);
+
+  // Se estiver AO VIVO, renderiza o player do YouTube com iframe
+  if (liveVideo) {
+    const embedUrl = `https://www.youtube.com/embed/${liveVideo.videoId}?autoplay=1&mute=1&controls=1`;
+
+    return (
+      <section>
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative aspect-video rounded-2xl overflow-hidden bg-black">
+            <iframe
+              src={embedUrl}
+              title={liveVideo.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              className="w-full h-full border-0"
+            ></iframe>
+
+            <div className="absolute top-0 left-0 p-6 md:p-8 pointer-events-none">
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7 }}
+                className="flex items-center gap-3 bg-red-600/90 text-white font-bold py-2 px-4 rounded-full"
+              >
+                <div className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
+                </div>
+                AO VIVO
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Se NÃO estiver ao vivo (ou ainda estiver carregando), renderiza o banner padrão
   return (
     <section>
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -42,11 +109,12 @@ export const Banner = () => {
                 loop
                 muted
                 playsInline
+                controls={false}
               />
             </motion.div>
           </div>
 
-          <div className="absolute inset-0 bg-gradient-to-t from-transparent to-transparent rounded-2xl"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-2xl"></div>
 
           <motion.div
             className="relative z-10 flex flex-col justify-end lg:justify-end h-full p-6 md:p-12 text-white"
