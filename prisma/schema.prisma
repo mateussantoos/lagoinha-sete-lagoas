@@ -13,6 +13,7 @@ model User {
   email     String   @unique
   name      String
   password  String
+  role      UserRole @default(MEMBER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -42,4 +43,104 @@ model GCLeader {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Ministerio {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  description String?
+  leaderName  String?
+  imageSrc    String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+}
+
+model Evento {
+  id          String    @id @default(cuid())
+  title       String
+  description String
+  date        DateTime
+  location    String
+  imageSrc    String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+}
+
+
+
+// --- NOVOS MODELOS PARA A BOOKSTORE ---
+
+// Modelo para os Produtos da loja
+model Produto {
+  id                 String    @id @default(cuid())
+  name               String
+  sku                String    @unique // SKU (código único do produto)
+  description        String
+  price              Decimal   // Usamos Decimal para valores monetários, é mais preciso
+  isOnSale           Boolean   @default(false)
+  discountPercentage Int?      // Porcentagem de desconto (opcional)
+  stock              Int       @default(0) // Quantidade em estoque
+  imageSrc           String?
+  isPublished        Boolean   @default(true) // Permite criar "rascunhos" de produtos
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  // Relação: Um produto pode estar em várias categorias
+  categories         CategoriaProduto[]
+  // Relação: Um produto pode estar em vários itens de encomenda
+  encomendaItems     ItemEncomenda[]
+}
+
+// Modelo para as Categorias dos produtos (ex: Livros, Camisetas)
+model CategoriaProduto {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  description String?
+
+  // Relação: Uma categoria pode ter vários produtos
+  produtos Produto[]
+}
+
+// Modelo para a Encomenda feita por um cliente
+model Encomenda {
+  id            String    @id @default(cuid())
+  customerName  String
+  customerPhone String
+  customerEmail String?
+  status        OrderStatus @default(PENDENTE) // Status da encomenda (usando um Enum)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relação: Uma encomenda tem vários itens
+  items         ItemEncomenda[]
+}
+
+// Modelo que representa cada item dentro de uma encomenda (tabela de junção)
+model ItemEncomenda {
+  id          String @id @default(cuid())
+  quantity    Int    @default(1)
+  
+  // Relação com a Encomenda
+  encomendaId String
+  encomenda   Encomenda @relation(fields: [encomendaId], references: [id])
+  
+  // Relação com o Produto
+  produtoId String
+  produto   Produto   @relation(fields: [produtoId], references: [id])
+}
+
+// Enum para os status possíveis de uma encomenda
+enum OrderStatus {
+  PENDENTE
+  CONFIRMADA
+  RETIRADO
+  CANCELADA
+}
+
+// Enum para os níveis de acesso dos usuários
+enum UserRole {
+  MEMBER      // Usuário comum
+  ADMIN     // Administrador
 }
