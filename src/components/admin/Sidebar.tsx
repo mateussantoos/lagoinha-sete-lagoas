@@ -31,7 +31,6 @@ const navItems: NavItem[] = [
   { href: "/dashboard/eventos", label: "Eventos", icon: Calendar },
   { href: "/dashboard/ministerios", label: "Ministérios", icon: Mic },
 
-  { href: "/dashboard/carisma", label: "Carisma", icon: BookOpen },
   {
     href: "/dashboard/usuarios",
     label: "Usuários",
