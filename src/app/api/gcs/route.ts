@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     const {
       name,
       address,
-      date,
+      day,
       time,
       description,
       targetAudience,
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
       data: {
         name,
         address,
-        date,
+        day,
         time,
         description,
         targetAudience,

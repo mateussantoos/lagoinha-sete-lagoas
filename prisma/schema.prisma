@@ -22,7 +22,7 @@ model GC {
   id             String    @id @default(cuid())
   image          String?
   name           String
-  date           String?
+  day            String?
   time           String
   address        String
   description    String?
