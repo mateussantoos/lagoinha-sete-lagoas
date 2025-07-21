@@ -11,7 +11,7 @@ const contatoInfo = {
     `R. Olinto Alvim, 97 - Boa Vista, Sete Lagoas, Minas Gerais`
   ),
   get mapsLink() {
-    return `https://maps.google.com/?q=${this.mapsQuery}`;
+    return `/gcs`;
   },
   phoneNumber: "5531983311535",
   get formattedPhoneNumber() {
@@ -90,7 +90,6 @@ export const GcSection = () => {
                 <h3 className="font-bebas text-2xl uppercase">Fale Conosco</h3>
                 <a
                   href={contatoInfo.mapsLink}
-                  target="_blank"
                   rel="noopener noreferrer"
                   className="font-lato text-sm uppercase hover:text-primary transition-colors flex items-center gap-2"
                 >
@@ -155,7 +154,7 @@ export const GcSection = () => {
             e região, e um deles é perfeito para você.
           </p>
           <Button
-            href="/mapa-gcs"
+            href="/gcs"
             text="Mapa de GCs"
             icon={<MapIcon />}
             arrow={false}

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import Link from "next/link";
 
 // --- DADOS DO FAQ ---
 // Este é o "centro de controle". Edite, adicione ou remova perguntas aqui.

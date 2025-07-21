@@ -1,8 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Instagram, Facebook, Youtube, ArrowRight } from "lucide-react";
+import { Instagram, Facebook, Youtube } from "lucide-react";
 import Link from "next/link";
+import { Button } from "../common/Button";
 
 // --- DADOS DO RODAPÉ ---
 // Edite aqui para alterar os títulos e links das colunas
@@ -10,28 +10,25 @@ const footerLinkColumns = [
   {
     title: "Nossa Casa",
     links: [
-      { label: "Nossa História", href: "/historia" },
-      { label: "Nossas Crenças", href: "/crencas" },
-      { label: "Liderança", href: "/lideranca" },
-      { label: "Seja Membro", href: "/seja-membro" },
+      { label: "Nossa História", href: "/sobre" },
+      { label: "Nossas Crenças", href: "/sobre" },
+      { label: "Liderança", href: "/sobre" },
     ],
   },
   {
-    title: "Ações",
+    title: "Participe",
     links: [
-      { label: "Grupos de Crescimento", href: "/mapa-gcs" },
-      { label: "Ministério Infantil", href: "/infantil" },
-      { label: "Ação Social", href: "/acao-social" },
-      { label: "Curso para Casais", href: "/casais" },
+      { label: "Grupos de Crescimento", href: "/gcs" },
+      { label: "Ministérios", href: "/ministerios" },
+      { label: "Eventos", href: "/eventos" },
     ],
   },
   {
     title: "Recursos",
     links: [
-      { label: "Últimas Mensagens", href: "#" },
-      { label: "Club Cast", href: "#" },
-      { label: "Contribua", href: "/contribua" },
-      { label: "Contato", href: "/contato" },
+      { label: "Últimas Mensagens", href: "/#youtube" },
+      { label: "Bookstore", href: "/bookstore" },
+      { label: "Generosidade", href: "/generosidade" },
     ],
   },
 ];
@@ -39,16 +36,24 @@ const footerLinkColumns = [
 const socialLinks = [
   {
     name: "Instagram",
-    href: "https://www.instagram.com/lagoinha.setelagoas/",
+    href: "https://www.instagram.com/lagoinhasetelagoas/",
     icon: Instagram,
   },
   {
     name: "Facebook",
-    href: "https://www.facebook.com/lagoinha.setelagoas/",
+    href: "https://www.instagram.com/lagoinhasetelagoas/",
     icon: Facebook,
+  },
+  {
+    name: "YouTube",
+    href: "https://www.youtube.com/@lagoinhasetelagoas7913",
+    icon: Youtube,
   },
 ];
 
+const handleWhatsappClick = () => {
+  window.open("https://wa.me/5531998674933", "_blank");
+};
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
 
@@ -63,20 +68,14 @@ export const Footer = () => {
               Fique por dentro
             </h3>
             <p className="font-lato mt-2 text-sm text-neutral-600 dark:text-neutral-400">
-              Assine e receba as novidades da nossa igreja direto no seu e-mail.
+              Entre no nosso grupo particular no WhatsApp e receba todas as
+              noticias mais recentes em primeira mão.
             </p>
             <form className="mt-4 flex flex-col sm:flex-row gap-2">
-              <input
-                type="email"
-                placeholder="Seu melhor e-mail"
-                className="w-full px-4 py-2 bg-white dark:bg-neutral-800 dark:text-neutral-100 border border-neutral-300 dark:border-neutral-700 rounded-md focus:ring-2 focus:ring-primary focus:outline-none font-lato"
+              <Button
+                text="Entrar no Grupo WhatsApp"
+                onClick={handleWhatsappClick}
               />
-              <button
-                type="submit"
-                className="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-4 rounded-md transition-colors duration-300"
-              >
-                Enviar
-              </button>
             </form>
           </div>
 

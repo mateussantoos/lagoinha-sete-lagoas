@@ -8,6 +8,7 @@ import Image from "next/image";
 import logoBranca from "@/assets/svg/lagoinha-logoBranca.svg";
 import logoPreta from "@/assets/svg/lagoinha-logo.svg";
 import { ThemeToggle } from "./ThemeToggle";
+import Link from "next/link";
 
 const sections = [
   { title: "A Igreja", href: "/sobre" },
@@ -82,7 +83,7 @@ export const Navbar = () => {
               </motion.div>
             </AnimatePresence>
           </div>
-          <div className="flex space-x-2 text-neutral-600 dark:text-neutral-400">
+          <div className="flex items-center space-x-2 text-neutral-600 dark:text-neutral-400">
             <Tooltip title="Instagram">
               <a
                 href="https://www.instagram.com/lagoinhasetelagoas/"
@@ -119,14 +120,14 @@ export const Navbar = () => {
             }`}
         >
           {/* Logo */}
-          <a href="/" aria-label="Página inicial">
+          <Link href="/" aria-label="Página inicial">
             <Image
               src={isDark ? logoBranca : logoPreta}
               alt="Logo Lagoinha Sete Lagoas"
               className="h-8 w-auto transition-all"
               priority
             />
-          </a>
+          </Link>
 
           {/* Links Desktop */}
           <div className="hidden lg:flex items-center space-x-8">

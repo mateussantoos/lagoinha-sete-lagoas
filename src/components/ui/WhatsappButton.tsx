@@ -2,7 +2,7 @@
 
 import { MessageCirclePlus } from "lucide-react";
 
-const WHATSAPP_NUMBER = "5531998674933";
+const WHATSAPP_NUMBER = "5531983311535";
 
 type Product = {
   name: string;

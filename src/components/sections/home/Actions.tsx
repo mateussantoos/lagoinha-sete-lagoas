@@ -103,7 +103,10 @@ export const Actions = () => {
   });
 
   return (
-    <section className="py-24 bg-white dark:bg-black md:mt-20 lg:mt-45">
+    <section
+      id="ministerios"
+      className="py-24 bg-white dark:bg-black md:mt-20 lg:mt-45"
+    >
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

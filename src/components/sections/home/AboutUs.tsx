@@ -29,7 +29,7 @@ const imageVariants: Variants = {
 
 export const AboutUs = () => {
   return (
-    <section className="py-16 md:py-24 mt-20 lg:mt-45">
+    <section id="sobre" className="py-16 md:py-24 mt-20 lg:mt-45">
       <motion.div
         className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8"
         initial="hidden"

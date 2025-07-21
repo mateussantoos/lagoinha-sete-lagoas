@@ -54,7 +54,10 @@ export const Youtube = () => {
 
   return (
     <>
-      <section className="py-24 bg-stone-100 dark:bg-neutral-900 md:mt-20 lg:mt-45">
+      <section
+        id="youtube"
+        className="py-24 bg-stone-100 dark:bg-neutral-900 md:mt-20 lg:mt-45"
+      >
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             className="text-center"

@@ -57,7 +57,7 @@ export const ClubCast = () => {
   }, []);
 
   return (
-    <section className="py-24 bg-white dark:bg-black">
+    <section id="cast" className="py-24 bg-white dark:bg-black">
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* --- Cabeçalho da Seção --- */}
         <div className="flex justify-between items-center mb-8">

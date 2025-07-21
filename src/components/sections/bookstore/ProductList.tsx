@@ -16,7 +16,7 @@ export const ProductList = ({
   // --- ESTADOS DOS FILTROS ---
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortOrder, setSortOrder] = useState("default"); // 'default', 'price-asc', 'price-desc'
+  const [sortOrder, setSortOrder] = useState("default");
 
   const [filteredProducts, setFilteredProducts] = useState(products);
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
@@ -107,9 +107,9 @@ export const ProductList = ({
         </div>
 
         {/* Grid de Produtos */}
-        <motion.div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <motion.div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {filteredProducts.map((product, index) => (
-            <motion.div /* ... animação do card ... */>
+            <motion.div key={product.id}>
               <ProductCard
                 product={product}
                 onClick={() => setSelectedProduct(product)}
