@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import logoBranca from "@/assets/svg/lagoinha-logoBranca.svg";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 interface NavItem {
   href: string;
@@ -82,12 +83,20 @@ export const Sidebar = ({ user }: SidebarProps) => {
         </ul>
       </nav>
 
-      <div className="p-4 border-t border-neutral-800">
-        <p className="text-sm font-semibold truncate">{user.name}</p>
-        <p className="text-xs text-neutral-400 truncate">{user.email}</p>
+      <div className="p-4 border-t border-neutral-800 space-y-4">
+        <div>
+          <p className="text-sm font-semibold truncate">{user.name}</p>
+          <p className="text-xs text-neutral-400 truncate">{user.email}</p>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-neutral-300">Tema</span>
+          <ThemeToggle />
+        </div>
+
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-3 mt-4 rounded-lg text-left text-red-400 hover:bg-red-900/50 transition-colors"
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-red-400 hover:bg-red-900/50 transition-colors"
         >
           <LogOut className="h-5 w-5" />
           <span>Sair</span>
