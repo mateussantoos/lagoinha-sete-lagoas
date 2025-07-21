@@ -8,38 +8,38 @@ import Link from "next/link";
 // --- DADOS DA SEÇÃO ---
 const actionsData = [
   {
-    title: "Culto de Jovens",
+    title: "Ministério de Louvor",
     description:
-      "Um encontro vibrante preparado para a juventude, com louvor, palavra e muita comunhão. Acontece quinzenalmente.",
+      "Nossa equipe de louvor e adoração, dedicada a conduzir a igreja à presença de Deus através da música.",
     imageSrc: "/images/actions/webp/img01.webp",
-    link: "/jovens",
+    link: "/ministerios",
   },
   {
-    title: "Batismo",
+    title: "Dança",
     description:
-      "Milhares de vidas têm tomado a decisão de nascer de novo e, como igreja, nós celebramos cada pessoa que faz a melhor escolha.",
-    imageSrc: "/images/actions/webp/img02.webp",
-    link: "/batismo",
+      "Um ministério que expressa adoração e conta histórias através do movimento, trazendo beleza e profundidade aos nossos cultos.",
+    imageSrc: "/images/actions/webp/img03.webp",
+    link: "/ministerios",
   },
   {
     title: "Ação Social",
     description:
-      "Somos uma igreja que vive além da estrutura do templo, por meio de projetos que dão suporte a pessoas com vulnerabilidade social.",
-    imageSrc: "/images/actions/webp/img03.webp",
-    link: "/acao-social",
+      "O braço da igreja que alcança nossa cidade, oferecendo suporte, alimento e esperança para os que mais precisam.",
+    imageSrc: "/images/actions/webp/img02.webp",
+    link: "/ministerios",
   },
   {
     title: "Ministério Infantil",
     description:
-      "As crianças são o futuro, mas também são o presente. Temos um espaço preparado com muito carinho e segurança para elas.",
+      "Um espaço seguro, divertido e edificante onde nossas crianças aprendem sobre o amor de Jesus desde cedo.",
     imageSrc: "/images/actions/webp/img04.webp",
-    link: "/infantil",
+    link: "/ministerios",
   },
   {
-    title: "Grupos de Crescimento",
+    title: "Veja todos os ministérios",
     description:
-      "A igreja nos lares durante a semana. Um ambiente de comunhão, cuidado mútuo e aprofundamento na Palavra.",
-    link: "/mapa-gcs",
+      "Cada membro é um ministro. Descubra todas as áreas onde você pode servir e usar seus dons para edificar o corpo de Cristo.",
+    link: "/ministerios",
   },
 ];
 
@@ -113,7 +113,7 @@ export const Actions = () => {
           className="text-center mb-12"
         >
           <h2 className="font-bebas text-5xl sm:text-6xl lg:text-7xl leading-none tracking-tighter text-neutral-800 dark:text-neutral-100">
-            Conheça Nossas Ações
+            Nossos Ministérios
           </h2>
           <p className="font-lato mt-4 text-base md:text-lg max-w-2xl mx-auto text-neutral-600 dark:text-neutral-400">
             Cada iniciativa é um braço da igreja estendido para abençoar, cuidar

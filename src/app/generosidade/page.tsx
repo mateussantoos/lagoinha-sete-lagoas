@@ -10,8 +10,8 @@ export default function GenerosidadePage() {
       <Navbar />
       <main>
         <HeroGenerosidade />
-        <Metodos />
         <Proposito />
+        <Metodos />
       </main>
       <Footer />
     </>

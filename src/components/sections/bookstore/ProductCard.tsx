@@ -14,7 +14,7 @@ export const ProductCard = ({
   product,
   onClick,
 }: {
-  product: Product; // Ajustado de 'any' para o tipo correto para mais segurança
+  product: Product;
   onClick: () => void;
 }) => {
   const finalPrice =

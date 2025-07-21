@@ -71,7 +71,7 @@ export const NossaMissao = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <Image
-            src={ImageLagoinha} // Corrigido para usar a imagem importada
+            src={ImageLagoinha}
             alt="Momento de comunhão na igreja"
             fill
             className="object-cover"

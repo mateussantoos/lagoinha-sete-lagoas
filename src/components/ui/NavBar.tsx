@@ -13,7 +13,7 @@ const sections = [
   { title: "A Igreja", href: "/sobre" },
   { title: "Eventos", href: "/eventos" },
   { title: "GCs", href: "/gcs" },
-  { title: "Ministérios", href: "/ministérios" },
+  { title: "Ministérios", href: "/ministerios" },
   { title: "Generosidade", href: "/generosidade" },
   { title: "Bookstore", href: "/bookstore" },
   { title: "Carisma", href: "/carisma" },
