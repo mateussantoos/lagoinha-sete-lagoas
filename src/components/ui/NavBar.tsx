@@ -10,14 +10,14 @@ import logoPreta from "@/assets/svg/lagoinha-logo.svg";
 import { ThemeToggle } from "./ThemeToggle";
 
 const sections = [
-  "A Igreja",
-  "Eventos",
-  "GCs",
-  "Ministérios",
-  "Generosidade",
-  "Bookstore",
-  "Carisma",
-  "Contato",
+  { title: "A Igreja", href: "/sobre" },
+  { title: "Eventos", href: "/eventos" },
+  { title: "GCs", href: "/gcs" },
+  { title: "Ministérios", href: "/ministérios" },
+  { title: "Generosidade", href: "/generosidade" },
+  { title: "Bookstore", href: "/bookstore" },
+  { title: "Carisma", href: "/carisma" },
+  { title: "Contato", href: "/contato" },
 ];
 
 const phrases = [
@@ -119,7 +119,7 @@ export const Navbar = () => {
             }`}
         >
           {/* Logo */}
-          <a href="#" aria-label="Página inicial">
+          <a href="/" aria-label="Página inicial">
             <Image
               src={isDark ? logoBranca : logoPreta}
               alt="Logo Lagoinha Sete Lagoas"
@@ -132,12 +132,12 @@ export const Navbar = () => {
           <div className="hidden lg:flex items-center space-x-8">
             <ul className="flex space-x-6 font-bebas text-sm tracking-widest uppercase text-neutral-800 dark:text-neutral-100">
               {sections.map((sec) => (
-                <li key={sec}>
+                <li key={sec.title}>
                   <a
-                    href={`#${sec.toLowerCase()}`}
+                    href={sec.href}
                     className="hover:text-primary whitespace-nowrap transition-colors"
                   >
-                    {sec}
+                    {sec.title}
                   </a>
                 </li>
               ))}
@@ -168,13 +168,13 @@ export const Navbar = () => {
             >
               <ul className="flex flex-col space-y-4 p-6 font-bebas text-lg tracking-widest text-neutral-800 dark:text-neutral-100">
                 {sections.map((sec) => (
-                  <li key={sec}>
+                  <li key={sec.title}>
                     <a
-                      href={`#${sec.toLowerCase()}`}
+                      href={sec.href}
                       onClick={() => setIsMenuOpen(false)}
                       className="hover:text-primary transition-colors"
                     >
-                      {sec}
+                      {sec.title}
                     </a>
                   </li>
                 ))}
