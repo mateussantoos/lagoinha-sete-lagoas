@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   Users,
+  Users2,
   Calendar,
   Mic,
   ShoppingCart,
@@ -14,20 +15,33 @@ import {
 import Image from "next/image";
 import logoBranca from "@/assets/svg/lagoinha-logoBranca.svg";
 
-const navItems = [
+interface NavItem {
+  href: string;
+  label: string;
+  icon: React.ElementType;
+  role?: "ADMIN";
+}
+
+const navItems: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/dashboard/gcs", label: "GCs", icon: Users },
+  { href: "/dashboard/gcs", label: "GCs", icon: Users2 },
   { href: "/dashboard/eventos", label: "Eventos", icon: Calendar },
   { href: "/dashboard/ministerios", label: "Ministérios", icon: Mic },
   { href: "/dashboard/bookstore", label: "Bookstore", icon: ShoppingCart },
   { href: "/dashboard/carisma", label: "Carisma", icon: BookOpen },
-  { href: "/dashboard/usuarios", label: "Usuários", icon: Users },
+  {
+    href: "/dashboard/usuarios",
+    label: "Usuários",
+    icon: Users,
+    role: "ADMIN",
+  },
 ];
 
 interface SidebarProps {
   user: {
     name: string;
     email: string;
+    role: string;
   };
 }
 
@@ -48,21 +62,23 @@ export const Sidebar = ({ user }: SidebarProps) => {
 
       <nav className="flex-grow p-4">
         <ul>
-          {navItems.map((item) => (
-            <li key={item.href}>
-              <Link
-                href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 my-1 rounded-lg transition-colors ${
-                  pathname === item.href
-                    ? "bg-primary text-black font-bold"
-                    : "hover:bg-neutral-800"
-                }`}
-              >
-                <item.icon className="h-5 w-5" />
-                <span>{item.label}</span>
-              </Link>
-            </li>
-          ))}
+          {navItems
+            .filter((item) => !item.role || item.role === user.role)
+            .map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className={`flex items-center gap-3 px-4 py-3 my-1 rounded-lg transition-colors ${
+                    pathname === item.href
+                      ? "bg-primary text-black font-bold"
+                      : "hover:bg-neutral-800"
+                  }`}
+                >
+                  <item.icon className="h-5 w-5" />
+                  <span>{item.label}</span>
+                </Link>
+              </li>
+            ))}
         </ul>
       </nav>
 

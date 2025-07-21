@@ -47,9 +47,24 @@ export async function POST(request: Request) {
 }
 
 // Listar todos os usuários
-export async function GET(request: Request) {
-  const users = await prisma.user.findMany();
-  return NextResponse.json(users);
+export async function GET() {
+  try {
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+      },
+    });
+    return NextResponse.json(users);
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Erro ao buscar usuários" },
+      { status: 500 }
+    );
+  }
 }
 
 // Editar usuário existente
