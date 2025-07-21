@@ -28,6 +28,9 @@ model GC {
   description    String?
   targetAudience String?
 
+  latitude       Float?
+  longitude      Float?
+
   leaders        GCLeader[]
 
   createdAt DateTime @default(now())
@@ -40,6 +43,7 @@ model GCLeader {
   phone     String  
 
   gcs       GC[]
+
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

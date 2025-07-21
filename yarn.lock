@@ -295,6 +295,24 @@
     "@eslint/core" "^0.15.1"
     levn "^0.4.1"
 
+"@googlemaps/google-maps-services-js@^3.4.2":
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/@googlemaps/google-maps-services-js/-/google-maps-services-js-3.4.2.tgz#cdf75ce6a304e09026b22f7c362dbd3bb301d049"
+  integrity sha512-QjxiJSt8woyPaaQIUUDNL1nRfCEXTiv8KfJSNq/YzKEUVXABT75GLG+Zo267UwOcq70n8OsZbaro5VrY962mJg==
+  dependencies:
+    "@googlemaps/url-signature" "^1.0.4"
+    agentkeepalive "^4.1.0"
+    axios "^1.5.1"
+    query-string "<8.x"
+    retry-axios "<3.x"
+
+"@googlemaps/url-signature@^1.0.4":
+  version "1.0.40"
+  resolved "https://registry.yarnpkg.com/@googlemaps/url-signature/-/url-signature-1.0.40.tgz#f23ae281a07f9e04345fb456053fd2cc6144fb28"
+  integrity sha512-Gme3JxGZWQ4NVpATajSpS2/inQzhUxRvr/FK6IFpcC7AHOAmx8blI0y1/Qi2jqil+WoQ3TkEqq/MaKVtuV68RQ==
+  dependencies:
+    crypto-js "^4.2.0"
+
 "@humanfs/core@^0.19.1":
   version "0.19.1"
   resolved "https://registry.npmjs.org/@humanfs/core/-/core-0.19.1.tgz"
@@ -882,6 +900,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/google.maps@^3.54.10":
+  version "3.58.1"
+  resolved "https://registry.yarnpkg.com/@types/google.maps/-/google.maps-3.58.1.tgz#71ce3dec44de1452f56641d2c87c7dd8ea964b4d"
+  integrity sha512-X9QTSvGJ0nCfMzYOnaVs/k6/4L+7F5uCS+4iUmkLEls6J9S/Phv+m/i3mDeyc49ZBgwab3EFO1HEoBY7k98EGQ==
+
 "@types/json-schema@^7.0.15", "@types/json-schema@^7.0.8":
   version "7.0.15"
   resolved "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.15.tgz"
@@ -1146,6 +1169,14 @@
   resolved "https://registry.npmjs.org/@unrs/resolver-binding-win32-x64-msvc/-/resolver-binding-win32-x64-msvc-1.11.1.tgz"
   integrity sha512-lrW200hZdbfRtztbygyaq/6jP6AKE8qQN2KvPcJ+x7wiD038YtnYtZ82IMNJ69GJibV7bwL3y9FgK+5w/pYt6g==
 
+"@vis.gl/react-google-maps@^1.5.4":
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/@vis.gl/react-google-maps/-/react-google-maps-1.5.4.tgz#56a9ad3f56af3b992855bdde28502fc5965b54b5"
+  integrity sha512-pD3e2wDtOfd439mamkacRgrM6I2B/lue61QCR0pGQT8MVaG9pz9/LajHbsjZW2lms8Ao8mf2PQJeiGC2FxI0Fw==
+  dependencies:
+    "@types/google.maps" "^3.54.10"
+    fast-deep-equal "^3.1.3"
+
 acorn-jsx@^5.3.2:
   version "5.3.2"
   resolved "https://registry.npmjs.org/acorn-jsx/-/acorn-jsx-5.3.2.tgz"
@@ -1160,6 +1191,13 @@ agent-base@^7.1.2:
   version "7.1.4"
   resolved "https://registry.yarnpkg.com/agent-base/-/agent-base-7.1.4.tgz#e3cd76d4c548ee895d3c3fd8dc1f6c5b9032e7a8"
   integrity sha512-MnA+YT8fwfJPgBx3m60MNqakm30XOkyIoH1y6huTQvC0PwZG7ki8NacLBcrPbNoo8vEZy7Jpuk7+jMO+CUovTQ==
+
+agentkeepalive@^4.1.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/agentkeepalive/-/agentkeepalive-4.6.0.tgz#35f73e94b3f40bf65f105219c623ad19c136ea6a"
+  integrity sha512-kja8j7PjmncONqaTsB8fQ+wE2mSU2DJ9D4XKoJ5PFWIdRMa6SLSN1ff4mOr4jCbfRSsxR4keIiySJU0N9T5hIQ==
+  dependencies:
+    humanize-ms "^1.2.1"
 
 ajv-keywords@^3.5.2:
   version "3.5.2"
@@ -1316,7 +1354,7 @@ axe-core@^4.10.0:
   resolved "https://registry.npmjs.org/axe-core/-/axe-core-4.10.3.tgz"
   integrity sha512-Xm7bpRXnDSX2YE2YFfBk2FnF0ep6tmG7xPh8iHee8MIcrgq762Nkce856dYtJYLkuIoYZvGfTs/PbZhideTcEg==
 
-axios@^1.10.0:
+axios@^1.10.0, axios@^1.5.1:
   version "1.10.0"
   resolved "https://registry.npmjs.org/axios/-/axios-1.10.0.tgz"
   integrity sha512-/1xYAC4MP/HEG+3duIhFr4ZQXR4sQXOIe+o6sdqzeykGLx6Upp/1p8MHqhINOvGeP7xyNHe7tsiJByc4SSVUxw==
@@ -1518,6 +1556,11 @@ cross-spawn@^7.0.6:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
+crypto-js@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-4.2.0.tgz#4d931639ecdfd12ff80e8186dba6af2c2e856631"
+  integrity sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==
+
 csstype@^3.0.2, csstype@^3.1.3:
   version "3.1.3"
   resolved "https://registry.npmjs.org/csstype/-/csstype-3.1.3.tgz"
@@ -1573,6 +1616,11 @@ debug@^3.2.7:
   integrity sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==
   dependencies:
     ms "^2.1.1"
+
+decode-uri-component@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.2.tgz#e69dbe25d37941171dd540e024c444cd5188e1e9"
+  integrity sha512-FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==
 
 deep-is@^0.1.3:
   version "0.1.4"
@@ -2115,6 +2163,11 @@ fill-range@^7.1.1:
   dependencies:
     to-regex-range "^5.0.1"
 
+filter-obj@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/filter-obj/-/filter-obj-1.1.0.tgz#9b311112bc6c6127a16e016c6c5d7f19e0805c5b"
+  integrity sha512-8rXg1ZnX7xzy2NGDVkBVaAy+lSlPNwad13BtgSlLuxfIslyt5Vg64U7tFcCt4WS1R0hvtnQybT/IyCkGZ3DpXQ==
+
 find-root@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/find-root/-/find-root-1.1.0.tgz"
@@ -2413,6 +2466,13 @@ https-proxy-agent@^7.0.1:
   dependencies:
     agent-base "^7.1.2"
     debug "4"
+
+humanize-ms@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/humanize-ms/-/humanize-ms-1.2.1.tgz#c46e3159a293f6b896da29316d8b6fe8bb79bbed"
+  integrity sha512-Fl70vYtsAFb/C06PTS9dZBo7ihau+Tu/DNCk/OyHhea07S+aeMWpFFkUaXRa8fI+ScZbEI8dfSxwY7gxZ9SAVQ==
+  dependencies:
+    ms "^2.0.0"
 
 ignore@^5.2.0:
   version "5.3.2"
@@ -3041,7 +3101,7 @@ motion-utils@^12.23.6:
   resolved "https://registry.npmjs.org/motion-utils/-/motion-utils-12.23.6.tgz"
   integrity sha512-eAWoPgr4eFEOFfg2WjIsMoqJTW6Z8MTUCgn/GZ3VRpClWBdnbjryiA3ZSNLyxCTmCQx4RmYX6jX1iWHbenUPNQ==
 
-ms@^2.1.1, ms@^2.1.3:
+ms@^2.0.0, ms@^2.1.1, ms@^2.1.3:
   version "2.1.3"
   resolved "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
@@ -3333,6 +3393,16 @@ qs@^6.14.0, qs@^6.7.0:
   dependencies:
     side-channel "^1.1.0"
 
+query-string@<8.x:
+  version "7.1.3"
+  resolved "https://registry.yarnpkg.com/query-string/-/query-string-7.1.3.tgz#a1cf90e994abb113a325804a972d98276fe02328"
+  integrity sha512-hh2WYhq4fi8+b+/2Kg9CEge4fDPvHS534aOOvOZeQ3+Vf2mCFsaFBYj0i+iXcAq6I9Vzp5fjMFBlONvayDC1qg==
+  dependencies:
+    decode-uri-component "^0.2.2"
+    filter-obj "^1.1.0"
+    split-on-first "^1.0.0"
+    strict-uri-encode "^2.0.0"
+
 queue-microtask@^1.2.2:
   version "1.2.3"
   resolved "https://registry.npmjs.org/queue-microtask/-/queue-microtask-1.2.3.tgz"
@@ -3428,6 +3498,11 @@ resolve@^2.0.0-next.5:
     is-core-module "^2.13.0"
     path-parse "^1.0.7"
     supports-preserve-symlinks-flag "^1.0.0"
+
+retry-axios@<3.x:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/retry-axios/-/retry-axios-2.6.0.tgz#d4dc5c8a8e73982e26a705e46a33df99a28723e0"
+  integrity sha512-pOLi+Gdll3JekwuFjXO3fTq+L9lzMQGcSq7M5gIjExcl3Gu1hd4XXuf5o3+LuSBsaULQH7DiNbsqPd1chVpQGQ==
 
 reusify@^1.0.4:
   version "1.1.0"
@@ -3630,6 +3705,11 @@ source-map@^0.5.7:
   resolved "https://registry.npmjs.org/source-map/-/source-map-0.5.7.tgz"
   integrity sha512-LbrmJOMUSdEVxIKvdcJzQC+nQhe8FUZQTXQy6+I75skNgn3OoQ0DZA8YnFa7gp8tqtL3KPf1kmo0R5DoApeSGQ==
 
+split-on-first@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/split-on-first/-/split-on-first-1.1.0.tgz#f610afeee3b12bce1d0c30425e76398b78249a5f"
+  integrity sha512-43ZssAJaMusuKWL8sKUBQXHWOpq8d6CfN/u1p4gUzfJkM05C8rxTmYrkIPTXapZpORA6LkkzcUulJ8FqA7Uudw==
+
 stable-hash@^0.0.5:
   version "0.0.5"
   resolved "https://registry.npmjs.org/stable-hash/-/stable-hash-0.0.5.tgz"
@@ -3642,6 +3722,11 @@ stop-iteration-iterator@^1.1.0:
   dependencies:
     es-errors "^1.3.0"
     internal-slot "^1.1.0"
+
+strict-uri-encode@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/strict-uri-encode/-/strict-uri-encode-2.0.0.tgz#b9c7330c7042862f6b142dc274bbcc5866ce3546"
+  integrity sha512-QwiXZgpRcKkhTj2Scnn++4PKtWsH0kpzZ62L2R6c/LUVYv7hVnZqcg2+sMuT6R7Jusu1vviK/MFsu6kNJfWlEQ==
 
 string.prototype.includes@^2.0.1:
   version "2.0.1"

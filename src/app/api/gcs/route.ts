@@ -1,7 +1,9 @@
 import { PrismaClient } from "@/generated/prisma/client";
 import { NextResponse } from "next/server";
+import { Client } from "@googlemaps/google-maps-services-js";
 
 const prisma = new PrismaClient();
+const googleMapsClient = new Client({});
 
 export async function GET() {
   try {
@@ -29,11 +31,21 @@ export async function POST(request: Request) {
       leaderIds,
     } = body;
 
-    if (!leaderIds || leaderIds.length === 0) {
-      return NextResponse.json(
-        { error: "É necessário fornecer o ID de pelo menos um líder." },
-        { status: 400 }
-      );
+    let latitude = null;
+    let longitude = null;
+
+    if (address) {
+      const geocodeResponse = await googleMapsClient.geocode({
+        params: {
+          address: address,
+          key: process.env.Maps_API_KEY!,
+        },
+      });
+      if (geocodeResponse.data.results[0]) {
+        const location = geocodeResponse.data.results[0].geometry.location;
+        latitude = location.lat;
+        longitude = location.lng;
+      }
     }
 
     const newGC = await prisma.gC.create({
@@ -45,6 +57,8 @@ export async function POST(request: Request) {
         description,
         targetAudience,
         image,
+        latitude,
+        longitude,
         leaders: {
           connect: leaderIds.map((id: string) => ({ id })),
         },
