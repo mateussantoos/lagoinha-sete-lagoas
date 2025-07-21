@@ -11,6 +11,7 @@ import {
   ShoppingCart,
   BookOpen,
   LogOut,
+  Tag,
 } from "lucide-react";
 import Image from "next/image";
 import logoBranca from "@/assets/svg/lagoinha-logoBranca.svg";
@@ -29,12 +30,24 @@ const navItems: NavItem[] = [
   { href: "/dashboard/gcs", label: "GCs", icon: Users2 },
   { href: "/dashboard/eventos", label: "Eventos", icon: Calendar },
   { href: "/dashboard/ministerios", label: "Ministérios", icon: Mic },
-  { href: "/dashboard/bookstore", label: "Bookstore", icon: ShoppingCart },
+
   { href: "/dashboard/carisma", label: "Carisma", icon: BookOpen },
   {
     href: "/dashboard/usuarios",
     label: "Usuários",
     icon: Users,
+    role: "ADMIN",
+  },
+  {
+    href: "/dashboard/bookstore",
+    label: "Bookstore",
+    icon: ShoppingCart,
+    role: "ADMIN",
+  },
+  {
+    href: "/dashboard/categorias",
+    label: "Categorias",
+    icon: Tag,
     role: "ADMIN",
   },
 ];
