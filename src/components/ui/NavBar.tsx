@@ -17,7 +17,6 @@ const sections = [
   { title: "Ministérios", href: "/ministerios" },
   { title: "Generosidade", href: "/generosidade" },
   { title: "Bookstore", href: "/bookstore" },
-  { title: "Carisma", href: "/carisma" },
   { title: "Contato", href: "/contato" },
 ];
 

@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Button } from "../common/Button";
 
 // --- DADOS DO RODAPÉ ---
-// Edite aqui para alterar os títulos e links das colunas
 const footerLinkColumns = [
   {
     title: "Nossa Casa",
