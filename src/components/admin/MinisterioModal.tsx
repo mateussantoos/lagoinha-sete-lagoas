@@ -50,7 +50,7 @@ export const MinisterioModal = ({
       setImageFile(null);
       setImagePreview(null);
     }
-  }, [ministerioToEdit, isOpen]);
+  }, [ministerioToEdit, isOpen, isEditMode]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

@@ -76,7 +76,7 @@ export const ProductModal = ({
       setImagePreview(null);
     }
     setImageFile(null);
-  }, [productToEdit, isOpen]);
+  }, [productToEdit, isOpen, isEditMode]);
 
   const handleInputChange = (e: React.ChangeEvent<any>) => {
     const { name, value, type, checked } = e.target;

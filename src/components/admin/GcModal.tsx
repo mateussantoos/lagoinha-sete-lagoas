@@ -62,7 +62,7 @@ export const GcModal = ({
       });
       setSelectedLeaderIds([]);
     }
-  }, [gcToEdit, isOpen]);
+  }, [gcToEdit, isOpen, isEditMode]);
 
   const handleInputChange = (
     e: React.ChangeEvent<

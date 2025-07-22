@@ -45,7 +45,7 @@ export const UserModal = ({
       setPassword("");
       setRole("MEMBER");
     }
-  }, [userToEdit, isOpen]);
+  }, [userToEdit, isOpen, isEditMode]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

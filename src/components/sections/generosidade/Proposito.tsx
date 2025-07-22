@@ -51,9 +51,6 @@ export const Proposito = () => {
           viewport={{ once: true }}
         >
           <blockquote className="relative">
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 text-6xl text-neutral-200 dark:text-neutral-700 font-serif">
-              "
-            </div>
             <h2 className="font-crimson-text italic text-3xl md:text-4xl lg:text-5xl text-neutral-800 dark:text-neutral-100  relative z-10">
               Cada um contribua segundo propôs no seu coração, não com tristeza
               ou por necessidade; porque Deus ama ao que dá com alegria.

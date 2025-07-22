@@ -60,7 +60,7 @@ export const EventoModal = ({
       });
       setImagePreview(null);
     }
-  }, [eventoToEdit, isOpen]);
+  }, [eventoToEdit, isOpen, isEditMode]);
 
   const handleInputChange = (
     e: React.ChangeEvent<

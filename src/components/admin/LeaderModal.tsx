@@ -37,7 +37,7 @@ export const LeaderModal = ({
       setName("");
       setPhone("");
     }
-  }, [leaderToEdit, isOpen]);
+  }, [leaderToEdit, isOpen, isEditMode]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

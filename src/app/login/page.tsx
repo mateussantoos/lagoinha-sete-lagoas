@@ -127,7 +127,7 @@ export default function LoginPage() {
         >
           <div>
             <h3 className="font-crimson-text italic text-4xl leading-snug">
-              "Um lugar para pertencer, uma família para amar."
+              “Um lugar para pertencer, uma família para amar.”
             </h3>
             <p className="font-lato mt-4 text-lg opacity-80">
               Lagoinha Sete Lagoas

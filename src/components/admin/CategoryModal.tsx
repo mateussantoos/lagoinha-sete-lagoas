@@ -32,7 +32,7 @@ export const CategoryModal = ({
     } else {
       setFormData({ name: "", description: "" });
     }
-  }, [categoryToEdit, isOpen]);
+  }, [categoryToEdit, isOpen, isEditMode]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

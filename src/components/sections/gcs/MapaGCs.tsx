@@ -95,6 +95,7 @@ const MapContent = ({ gcs }: { gcs: any[] }) => {
             position={{ lat: gc.latitude, lng: gc.longitude }}
             onClick={() => handleGcClick(gc)}
           >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={MarkerLagoinha.src}
               alt={`Marcador para o GC ${gc.name}`}
