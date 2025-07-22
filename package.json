@@ -16,6 +16,7 @@
     "@mui/material": "^7.2.0",
     "@prisma/client": "^6.12.0",
     "@studio-freight/lenis": "^1.0.42",
+    "@vercel/blob": "^1.1.1",
     "@vis.gl/react-google-maps": "^1.5.4",
     "axios": "^1.10.0",
     "bcrypt": "^6.0.0",
