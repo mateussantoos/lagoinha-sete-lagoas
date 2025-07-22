@@ -2,7 +2,8 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, Compass, Home, Search } from "lucide-react";
+import { ArrowRight, Compass, Home } from "lucide-react";
+
 import Image from "next/image";
 import BgImage from "@/assets/webp/img05.webp";
 

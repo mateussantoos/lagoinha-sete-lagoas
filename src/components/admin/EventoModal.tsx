@@ -83,13 +83,10 @@ export const EventoModal = ({
     let finalImageSrc = eventoToEdit?.imageSrc || "";
 
     if (imageFile) {
-      const uploadFormData = new FormData();
-      uploadFormData.append("file", imageFile);
-
       try {
         const response = await fetch("/api/upload", {
           method: "POST",
-          body: uploadFormData,
+          body: imageFile,
         });
         const result = await response.json();
         if (!response.ok) throw new Error(result.error || "Erro no upload");

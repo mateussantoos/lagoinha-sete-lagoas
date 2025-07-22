@@ -67,13 +67,10 @@ export const MinisterioModal = ({
 
     // 1. Se um novo arquivo foi selecionado, faz o upload para a API
     if (imageFile) {
-      const uploadFormData = new FormData();
-      uploadFormData.append("file", imageFile);
-
       try {
         const response = await fetch("/api/upload", {
           method: "POST",
-          body: uploadFormData,
+          body: imageFile,
         });
         const result = await response.json();
         if (!response.ok)

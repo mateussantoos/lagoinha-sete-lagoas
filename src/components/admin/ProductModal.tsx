@@ -108,13 +108,10 @@ export const ProductModal = ({
     let finalImageSrc = isEditMode ? productToEdit?.imageSrc : null;
 
     if (imageFile) {
-      const uploadFormData = new FormData();
-      uploadFormData.append("file", imageFile);
-
       try {
         const response = await fetch("/api/upload", {
           method: "POST",
-          body: uploadFormData,
+          body: imageFile,
         });
         const result = await response.json();
         if (!response.ok)
