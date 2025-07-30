@@ -16,7 +16,7 @@ const cultos = [
     titulo: "Culto Fé",
   },
   {
-    dia: "Sexta-feira",
+    dia: "Sábado",
     horarios: "19:30h",
     titulo: "Culto de Jovens - Legacy",
   },
