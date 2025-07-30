@@ -1,23 +1,36 @@
-import { PrismaClient } from "@/generated/prisma/client";
 import { NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
+import { db } from "@/services/firebase";
+import {
+  collection,
+  getDocs,
+  doc,
+  addDoc,
+  query,
+  orderBy,
+  where,
+  documentId,
+  writeBatch,
+} from "firebase/firestore";
 
 // Função para LISTAR todas as encomendas
 export async function GET() {
   try {
-    const encomendas = await prisma.encomenda.findMany({
-      include: {
-        items: {
-          include: {
-            produto: true,
-          },
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+    const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
+    const encomendasSnapshot = await getDocs(q);
+
+    // Para enriquecer os dados, vamos buscar os produtos de cada encomenda
+    // Esta parte pode ser otimizada no futuro se necessário
+    const encomendas = await Promise.all(
+      encomendasSnapshot.docs.map(async (doc) => {
+        const encomendaData = doc.data();
+        // A lógica para incluir detalhes do produto já está no item da encomenda
+        return {
+          id: doc.id,
+          ...encomendaData,
+        };
+      })
+    );
+
     return NextResponse.json(encomendas);
   } catch (error) {
     console.error("Erro ao buscar encomendas:", error);
@@ -41,40 +54,57 @@ export async function POST(request: Request) {
       );
     }
 
-    const novaEncomenda = await prisma.$transaction(async (tx) => {
-      const encomenda = await tx.encomenda.create({
-        data: {
-          customerName,
-          customerPhone,
-          customerEmail,
-        },
+    const batch = writeBatch(db);
+    const newEncomendaRef = doc(collection(db, "orders"));
+
+    const productIds = items.map(
+      (item: { produtoId: string }) => item.produtoId
+    );
+
+    if (productIds.length > 0) {
+      const productsQuery = query(
+        collection(db, "products"),
+        where(documentId(), "in", productIds)
+      );
+      const productsSnapshot = await getDocs(productsQuery);
+
+      const productsData: { [key: string]: any } = {};
+      productsSnapshot.forEach((doc) => {
+        productsData[doc.id] = doc.data();
       });
 
-      const itensParaCriar = items.map(
-        (item: { produtoId: string; quantity: number }) => ({
-          encomendaId: encomenda.id,
-          produtoId: item.produtoId,
-          quantity: item.quantity,
-        })
+      const itemsWithSnapshot = items.map(
+        (item: { produtoId: string; quantity: number }) => {
+          const product = productsData[item.produtoId];
+          if (!product) {
+            throw new Error(`Produto com ID ${item.produtoId} não encontrado.`);
+          }
+          return {
+            produtoId: item.produtoId,
+            quantity: item.quantity,
+            productName: product.name,
+            productPrice: product.price,
+          };
+        }
       );
 
-      await tx.itemEncomenda.createMany({
-        data: itensParaCriar,
+      batch.set(newEncomendaRef, {
+        customerName,
+        customerPhone,
+        customerEmail: customerEmail || null,
+        items: itemsWithSnapshot,
+        status: "PENDENTE",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       });
 
-      return tx.encomenda.findUnique({
-        where: { id: encomenda.id },
-        include: {
-          items: {
-            include: {
-              produto: true,
-            },
-          },
-        },
-      });
-    });
+      await batch.commit();
+    }
 
-    return NextResponse.json(novaEncomenda, { status: 201 });
+    return NextResponse.json(
+      { id: newEncomendaRef.id, ...body },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("Erro ao criar encomenda:", error);
     return NextResponse.json(

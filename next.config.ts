@@ -15,6 +15,10 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/image/**",
       },
+      {
+        protocol: "https",
+        hostname: "firebasestorage.googleapis.com",
+      },
     ],
   },
   turbopack: {

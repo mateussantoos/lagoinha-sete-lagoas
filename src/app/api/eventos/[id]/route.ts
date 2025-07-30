@@ -1,29 +1,32 @@
-import { PrismaClient } from "@/generated/prisma/client";
 import { NextResponse } from "next/server";
+import { db } from "@/services/firebase";
+import {
+  doc,
+  updateDoc,
+  deleteDoc,
+  getDoc,
+  Timestamp,
+} from "firebase/firestore";
 
-const prisma = new PrismaClient();
-
-// ATUALIZAR um evento
+// Função para ATUALIZAR um evento específico
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const id = params.id;
+    const id = context.params.id;
     const body = await request.json();
-    const { title, description, date, location, imageSrc } = body;
+    const { date, ...eventData } = body;
 
-    const updatedEvento = await prisma.evento.update({
-      where: { id },
-      data: {
-        title,
-        description,
-        date: new Date(date),
-        location,
-        imageSrc,
-      },
+    const docRef = doc(db, "eventos", id);
+    await updateDoc(docRef, {
+      ...eventData,
+      date: Timestamp.fromDate(new Date(date)),
+      updatedAt: Timestamp.now(),
     });
-    return NextResponse.json(updatedEvento);
+
+    const updatedEvent = await getDoc(docRef);
+    return NextResponse.json({ id: updatedEvent.id, ...updatedEvent.data() });
   } catch (error) {
     console.error("Erro ao atualizar evento:", error);
     return NextResponse.json(
@@ -33,16 +36,14 @@ export async function PUT(
   }
 }
 
-// DELETAR um evento
+// Função para DELETAR um evento específico
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const id = params.id;
-    await prisma.evento.delete({
-      where: { id },
-    });
+    const id = context.params.id;
+    await deleteDoc(doc(db, "eventos", id));
     return NextResponse.json({ message: "Evento deletado com sucesso" });
   } catch (error) {
     console.error("Erro ao deletar evento:", error);

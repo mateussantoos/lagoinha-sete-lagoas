@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Tag } from "lucide-react";
+import { X } from "lucide-react";
 import Image from "next/image";
 
 type Category = { id: string; name: string };
@@ -109,9 +109,12 @@ export const ProductModal = ({
 
     if (imageFile) {
       try {
+        const uploadFormData = new FormData();
+        uploadFormData.append("file", imageFile);
+
         const response = await fetch("/api/upload", {
           method: "POST",
-          body: imageFile,
+          body: uploadFormData,
         });
         const result = await response.json();
         if (!response.ok)
@@ -302,14 +305,15 @@ export const ProductModal = ({
                     />
                   )}
                   <label
-                    htmlFor="file-upload"
+                    htmlFor="product-file-upload"
                     className="relative cursor-pointer bg-white dark:bg-neutral-800 rounded-md font-medium text-primary hover:text-primary/80 p-2 border border-dashed"
                   >
                     <span>
                       {imagePreview ? "Trocar imagem" : "Enviar uma imagem"}
                     </span>
                     <input
-                      id="file-upload"
+                      id="product-file-upload"
+                      name="product-file-upload"
                       type="file"
                       className="sr-only"
                       onChange={handleImageChange}

@@ -135,10 +135,10 @@ export const Footer = () => {
       {/* --- TEXTO GIGANTE DE FUNDO --- */}
       <div
         aria-hidden="true"
-        className="absolute -bottom-35 left-0 w-full h-full flex items-end justify-start select-none pointer-events-none z-0"
+        className="absolute  -bottom-35 left-0 w-full h-full flex items-end justify-center select-none pointer-events-none z-0"
       >
         <h2
-          className="font-bebas font-bold text-stone-200 dark:text-neutral-800/50 whitespace-nowrap"
+          className="absolute font-bebas font-bold text-stone-200 dark:text-neutral-800/50 whitespace-nowrap "
           style={{ fontSize: "clamp(2rem, 14vw, 20rem)" }}
         >
           Lagoinha Sete Lagoas

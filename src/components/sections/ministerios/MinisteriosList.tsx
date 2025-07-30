@@ -1,14 +1,44 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { MinisterioCard } from "./MinisterioCard";
 import { MinisterioDetailModal } from "./MinisterioDetailModal";
 
-export const MinisteriosList = ({ ministerios }: { ministerios: any[] }) => {
-  const [selectedMinisterio, setSelectedMinisterio] = useState<any | null>(
-    null
-  );
+// Tipagem para os dados que esperamos da nossa API
+type Ministerio = {
+  id: string;
+  name: string;
+  description?: string | null;
+  leaderName?: string | null;
+  imageSrc?: string | null;
+};
+
+export const MinisteriosList = () => {
+  const [ministerios, setMinisterios] = useState<Ministerio[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedMinisterio, setSelectedMinisterio] =
+    useState<Ministerio | null>(null);
+
+  useEffect(() => {
+    const fetchMinisterios = async () => {
+      try {
+        const response = await fetch("/api/ministerios");
+        if (!response.ok) {
+          throw new Error("Falha ao buscar os ministérios.");
+        }
+        const data = await response.json();
+        setMinisterios(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMinisterios();
+  }, []);
 
   return (
     <>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, User, FileText, Image as ImageIcon, Mic } from "lucide-react"; // Ícones atualizados
+import { X, User, FileText, Mic } from "lucide-react";
 import Image from "next/image";
 
 type Ministerio = {
@@ -60,36 +60,42 @@ export const MinisterioModal = ({
     }
   };
 
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
   // A LÓGICA DE UPLOAD FOI CORRIGIDA AQUI
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     let finalImageSrc = isEditMode ? ministerioToEdit.imageSrc : null;
 
-    // 1. Se um novo arquivo foi selecionado, faz o upload para a API
     if (imageFile) {
       try {
+        const uploadFormData = new FormData();
+        uploadFormData.append("file", imageFile); // Chave "file" que a API espera
+
         const response = await fetch("/api/upload", {
           method: "POST",
-          body: imageFile,
+          body: uploadFormData, // Envia o FormData
         });
         const result = await response.json();
         if (!response.ok)
           throw new Error(result.error || "Erro no upload da imagem.");
-        finalImageSrc = result.imageUrl; // Guarda a URL pública retornada pela API
+        finalImageSrc = result.imageUrl;
       } catch (uploadError) {
         console.error("Falha no upload:", uploadError);
         alert("Ocorreu um erro ao enviar a imagem. Tente novamente.");
-        return; // Interrompe o envio se o upload falhar
+        return;
       }
     }
 
-    // 2. Prepara os dados finais para salvar
     const dataToSave = {
       ...formData,
       imageSrc: finalImageSrc,
     };
 
-    // 3. Chama a função onSave com os dados corretos
     onSave(dataToSave);
   };
 
@@ -124,9 +130,7 @@ export const MinisterioModal = ({
                 <input
                   name="name"
                   value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
+                  onChange={handleInputChange}
                   placeholder="Nome do Ministério"
                   required
                   className="w-full pl-10 pr-4 py-2 bg-stone-50 dark:bg-neutral-800 border rounded-lg"
@@ -137,9 +141,7 @@ export const MinisterioModal = ({
                 <input
                   name="leaderName"
                   value={formData.leaderName}
-                  onChange={(e) =>
-                    setFormData({ ...formData, leaderName: e.target.value })
-                  }
+                  onChange={handleInputChange}
                   placeholder="Nome do Líder (opcional)"
                   className="w-full pl-10 pr-4 py-2 bg-stone-50 dark:bg-neutral-800 border rounded-lg"
                 />
@@ -149,9 +151,7 @@ export const MinisterioModal = ({
                 <textarea
                   name="description"
                   value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
+                  onChange={handleInputChange}
                   placeholder="Descrição (opcional)"
                   className="w-full pl-10 pr-4 py-2 bg-stone-50 dark:bg-neutral-800 border rounded-lg min-h-[120px]"
                 />
@@ -171,15 +171,15 @@ export const MinisterioModal = ({
                     />
                   )}
                   <label
-                    htmlFor="file-upload"
+                    htmlFor="ministerio-file-upload"
                     className="relative cursor-pointer bg-white dark:bg-neutral-800 rounded-md font-medium text-primary hover:text-primary/80 p-2 border border-dashed"
                   >
                     <span>
                       {imagePreview ? "Trocar imagem" : "Enviar uma imagem"}
                     </span>
                     <input
-                      id="file-upload"
-                      name="file-upload"
+                      id="ministerio-file-upload"
+                      name="ministerio-file-upload"
                       type="file"
                       className="sr-only"
                       onChange={handleImageChange}

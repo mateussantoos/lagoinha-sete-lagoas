@@ -1,30 +1,29 @@
-import { PrismaClient } from "@/generated/prisma/client";
 import { NextResponse } from "next/server";
+import { db } from "@/services/firebase";
+import { doc, updateDoc, deleteDoc, getDoc } from "firebase/firestore";
 
-const prisma = new PrismaClient();
-
-// ATUALIZAR um produto específico
+// Função para ATUALIZAR um produto específico
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const id = params.id;
+    const id = context.params.id;
     const body = await request.json();
     const { categoryIds, ...productData } = body;
 
-    const updatedProduct = await prisma.produto.update({
-      where: { id },
-      data: {
-        ...productData,
-        categories: categoryIds
-          ? {
-              set: categoryIds.map((id: string) => ({ id })),
-            }
-          : undefined,
-      },
+    const docRef = doc(db, "products", id);
+    await updateDoc(docRef, {
+      ...productData,
+      categoryIds: categoryIds || [],
+      updatedAt: new Date().toISOString(),
     });
-    return NextResponse.json(updatedProduct);
+
+    const updatedProduct = await getDoc(docRef);
+    return NextResponse.json({
+      id: updatedProduct.id,
+      ...updatedProduct.data(),
+    });
   } catch (error) {
     console.error("Erro ao atualizar produto:", error);
     return NextResponse.json(
@@ -34,27 +33,17 @@ export async function PUT(
   }
 }
 
-// DELETAR um produto específico
+// Função para DELETAR um produto específico
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const id = params.id;
-    await prisma.produto.delete({
-      where: { id },
-    });
+    const id = context.params.id;
+    // Lógica futura: verificar se o produto está em alguma encomenda antes de deletar
+    await deleteDoc(doc(db, "products", id));
     return NextResponse.json({ message: "Produto deletado com sucesso" });
-  } catch (error: any) {
-    if (error.code === "P2003") {
-      return NextResponse.json(
-        {
-          error:
-            "Não é possível deletar. Este produto faz parte de uma ou mais encomendas.",
-        },
-        { status: 409 }
-      );
-    }
+  } catch (error) {
     console.error("Erro ao deletar produto:", error);
     return NextResponse.json(
       { error: "Erro ao deletar produto" },

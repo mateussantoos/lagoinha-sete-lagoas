@@ -1,11 +1,23 @@
-import { PrismaClient } from "@/generated/prisma/client";
 import { NextResponse } from "next/server";
+import { db } from "@/services/firebase";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  query,
+  orderBy,
+  Timestamp,
+} from "firebase/firestore";
 
-const prisma = new PrismaClient();
-
+// Função para LISTAR todos os eventos
 export async function GET() {
   try {
-    const eventos = await prisma.evento.findMany();
+    const q = query(collection(db, "eventos"), orderBy("date", "desc"));
+    const eventosSnapshot = await getDocs(q);
+    const eventos = eventosSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
     return NextResponse.json(eventos);
   } catch (error) {
     console.error("Erro ao buscar eventos:", error);
@@ -16,21 +28,24 @@ export async function GET() {
   }
 }
 
+// Função para CRIAR um novo evento
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { title, description, date, location, imageSrc } = body;
+    const { title, description, date, location, imageSrc, ministerioId } = body;
 
-    const newEvento = await prisma.evento.create({
-      data: {
-        title,
-        description,
-        date: new Date(date),
-        location,
-        imageSrc,
-      },
+    const docRef = await addDoc(collection(db, "eventos"), {
+      title,
+      description,
+      date: Timestamp.fromDate(new Date(date)),
+      location,
+      imageSrc: imageSrc || null,
+      ministerioId: ministerioId || null,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
     });
-    return NextResponse.json(newEvento, { status: 201 });
+
+    return NextResponse.json({ id: docRef.id, ...body }, { status: 201 });
   } catch (error) {
     console.error("Erro ao criar evento:", error);
     return NextResponse.json(

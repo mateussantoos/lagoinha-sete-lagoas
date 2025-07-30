@@ -5,11 +5,24 @@ import { motion } from "framer-motion";
 import { UserPlus, Edit, Trash2 } from "lucide-react";
 import { LeaderModal } from "@/components/admin/LeaderModal";
 
+// Tipagem para os dados brutos que vêm da API
+type ApiLeader = {
+  id: string;
+  name: string;
+  phone: string;
+  createdAt: {
+    // O Timestamp chega assim
+    seconds: number;
+    nanoseconds: number;
+  };
+};
+
+// Tipagem que o componente usa, com a data já convertida
 type Leader = {
   id: string;
   name: string;
   phone: string;
-  createdAt: string;
+  createdAt: string; // A data será uma string no formato ISO
 };
 
 export default function LideresPage() {
@@ -19,12 +32,20 @@ export default function LideresPage() {
   const [editingLeader, setEditingLeader] = useState<Leader | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // A MUDANÇA ESTÁ AQUI
   const fetchLeaders = async () => {
     setIsLoading(true);
     try {
       const response = await fetch("/api/leaders");
-      const data = await response.json();
-      setLeaders(data);
+      const apiData: ApiLeader[] = await response.json();
+
+      // Converte o campo 'createdAt' de cada líder para uma string ISO
+      const formattedLeaders: Leader[] = apiData.map((leader) => ({
+        ...leader,
+        createdAt: new Date(leader.createdAt.seconds * 1000).toISOString(),
+      }));
+
+      setLeaders(formattedLeaders);
     } catch (error) {
       console.error("Erro ao buscar líderes", error);
     } finally {
@@ -70,6 +91,7 @@ export default function LideresPage() {
       handleCloseModal();
     } catch (error) {
       console.error("Erro ao salvar:", error);
+      alert("Falha ao salvar líder.");
     } finally {
       setIsSubmitting(false);
     }
@@ -148,6 +170,7 @@ export default function LideresPage() {
                     <td className="p-4 text-neutral-600 dark:text-neutral-400">
                       {leader.phone}
                     </td>
+                    {/* Agora esta linha funciona sem erros */}
                     <td className="p-4 text-neutral-600 dark:text-neutral-400">
                       {new Date(leader.createdAt).toLocaleDateString("pt-BR")}
                     </td>

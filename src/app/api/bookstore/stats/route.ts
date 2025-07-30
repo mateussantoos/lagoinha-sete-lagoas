@@ -1,26 +1,37 @@
-import { PrismaClient } from "@/generated/prisma/client";
 import { NextResponse } from "next/server";
+import { db } from "@/services/firebase";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
-const prisma = new PrismaClient();
-
+// Função para buscar as métricas da Bookstore
 export async function GET() {
   try {
-    const productCount = await prisma.produto.count();
+    // 1. Contar total de produtos
+    const productsQuery = query(collection(db, "products"));
+    const productsSnapshot = await getDocs(productsQuery);
+    const productCount = productsSnapshot.size;
 
-    const pendingOrdersCount = await prisma.encomenda.count({
-      where: { status: "PENDENTE" },
-    });
+    // 2. Contar encomendas pendentes
+    const pendingOrdersQuery = query(
+      collection(db, "orders"),
+      where("status", "==", "PENDENTE")
+    );
+    const pendingOrdersSnapshot = await getDocs(pendingOrdersQuery);
+    const pendingOrdersCount = pendingOrdersSnapshot.size;
 
-    const lowStockCount = await prisma.produto.count({
-      where: {
-        stock: {
-          lt: 5,
-        },
-      },
-    });
+    // 3. Contar produtos com baixo estoque (< 5)
+    const lowStockQuery = query(
+      collection(db, "products"),
+      where("stock", "<", 5)
+    );
+    const lowStockSnapshot = await getDocs(lowStockQuery);
+    const lowStockCount = lowStockSnapshot.size;
 
-    const categoryCount = await prisma.categoriaProduto.count();
+    // 4. Contar total de categorias
+    const categoriesQuery = query(collection(db, "productCategories"));
+    const categoriesSnapshot = await getDocs(categoriesQuery);
+    const categoryCount = categoriesSnapshot.size;
 
+    // Retorna todas as métricas em um único objeto JSON
     return NextResponse.json({
       productCount,
       pendingOrdersCount,

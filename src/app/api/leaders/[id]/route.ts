@@ -1,23 +1,37 @@
-import { PrismaClient } from "@/generated/prisma/client";
 import { NextResponse } from "next/server";
+import { db } from "@/services/firebase";
+import {
+  doc,
+  updateDoc,
+  deleteDoc,
+  getDoc,
+  collection,
+  query,
+  where,
+  limit,
+  getDocs,
+} from "firebase/firestore";
 
-const prisma = new PrismaClient();
-
-// ATUALIZAR um líder
+// Função para ATUALIZAR um líder específico
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const id = params.id;
+    const id = context.params.id;
     const { name, phone } = await request.json();
 
-    const updatedLeader = await prisma.gCLeader.update({
-      where: { id },
-      data: { name, phone },
+    const docRef = doc(db, "leaders", id);
+    await updateDoc(docRef, {
+      name,
+      phone,
+      updatedAt: new Date().toISOString(),
     });
-    return NextResponse.json(updatedLeader);
+
+    const updatedLeader = await getDoc(docRef);
+    return NextResponse.json({ id: updatedLeader.id, ...updatedLeader.data() });
   } catch (error) {
+    console.error("Erro ao atualizar líder:", error);
     return NextResponse.json(
       { error: "Erro ao atualizar líder" },
       { status: 500 }
@@ -25,19 +39,23 @@ export async function PUT(
   }
 }
 
-// DELETAR um líder
+// Função para DELETAR um líder específico
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const id = params.id;
-    await prisma.gCLeader.delete({
-      where: { id },
-    });
-    return NextResponse.json({ message: "Líder deletado com sucesso" });
-  } catch (error: any) {
-    if (error.code === "P2003") {
+    const id = context.params.id;
+
+    // Verificação de segurança: checa se algum GC usa este líder
+    const q = query(
+      collection(db, "gcs"),
+      where("leaderIds", "array-contains", id),
+      limit(1)
+    );
+    const gcsQuery = await getDocs(q);
+
+    if (!gcsQuery.empty) {
       return NextResponse.json(
         {
           error:
@@ -46,6 +64,12 @@ export async function DELETE(
         { status: 409 }
       );
     }
+
+    await deleteDoc(doc(db, "leaders", id));
+
+    return NextResponse.json({ message: "Líder deletado com sucesso" });
+  } catch (error) {
+    console.error("Erro ao deletar líder:", error);
     return NextResponse.json(
       { error: "Erro ao deletar líder" },
       { status: 500 }

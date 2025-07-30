@@ -1,15 +1,37 @@
-import { PrismaClient } from "@/generated/prisma/client";
 import { NextResponse } from "next/server";
+import { db } from "@/services/firebase";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  query,
+  orderBy,
+} from "firebase/firestore";
 import { Client } from "@googlemaps/google-maps-services-js";
 
-const prisma = new PrismaClient();
 const googleMapsClient = new Client({});
 
+// Função para LISTAR todos os GCs
 export async function GET() {
   try {
-    const gcs = await prisma.gC.findMany({
-      include: { leaders: true },
+    const q = query(collection(db, "gcs"), orderBy("name", "asc"));
+    const gcsSnapshot = await getDocs(q);
+
+    // Para manter a compatibilidade, vamos buscar os líderes
+    const leadersSnapshot = await getDocs(collection(db, "leaders"));
+    const leadersMap = new Map(
+      leadersSnapshot.docs.map((doc) => [doc.id, doc.data()])
+    );
+
+    const gcs = gcsSnapshot.docs.map((doc) => {
+      const gcData = doc.data();
+      const leaders = (gcData.leaderIds || []).map((id: string) => ({
+        id,
+        name: leadersMap.get(id)?.name || "Líder não encontrado",
+      }));
+      return { id: doc.id, ...gcData, leaders };
     });
+
     return NextResponse.json(gcs);
   } catch (error) {
     console.error("Erro ao buscar GCs:", error);
@@ -17,19 +39,11 @@ export async function GET() {
   }
 }
 
+// Função para CRIAR um novo GC
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const {
-      name,
-      address,
-      day,
-      time,
-      description,
-      targetAudience,
-      image,
-      leaderIds,
-    } = body;
+    const { address, leaderIds, ...gcData } = body;
 
     let latitude = null;
     let longitude = null;
@@ -37,7 +51,7 @@ export async function POST(request: Request) {
     if (address) {
       const geocodeResponse = await googleMapsClient.geocode({
         params: {
-          address: address,
+          address: `${address}, Sete Lagoas, MG`,
           key: process.env.Maps_API_KEY!,
         },
       });
@@ -48,27 +62,17 @@ export async function POST(request: Request) {
       }
     }
 
-    const newGC = await prisma.gC.create({
-      data: {
-        name,
-        address,
-        day,
-        time,
-        description,
-        targetAudience,
-        image,
-        latitude,
-        longitude,
-        leaders: {
-          connect: leaderIds.map((id: string) => ({ id })),
-        },
-      },
-      include: {
-        leaders: true,
-      },
+    const docRef = await addDoc(collection(db, "gcs"), {
+      ...gcData,
+      address,
+      latitude,
+      longitude,
+      leaderIds: leaderIds || [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     });
 
-    return NextResponse.json(newGC, { status: 201 });
+    return NextResponse.json({ id: docRef.id, ...body }, { status: 201 });
   } catch (error) {
     console.error("Erro ao criar GC:", error);
     return NextResponse.json({ error: "Erro ao criar GC" }, { status: 500 });

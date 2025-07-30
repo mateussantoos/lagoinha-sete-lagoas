@@ -50,6 +50,7 @@ export const EventoModal = ({
         imageSrc: eventoToEdit.imageSrc || "",
       });
       setImagePreview(eventoToEdit.imageSrc || null);
+      setImageFile(null); // Limpa o arquivo ao abrir o modal em modo de edição
     } else {
       setFormData({
         title: "",
@@ -59,6 +60,7 @@ export const EventoModal = ({
         imageSrc: "",
       });
       setImagePreview(null);
+      setImageFile(null);
     }
   }, [eventoToEdit, isOpen, isEditMode]);
 
@@ -82,12 +84,20 @@ export const EventoModal = ({
     e.preventDefault();
     let finalImageSrc = eventoToEdit?.imageSrc || "";
 
+    // A MUDANÇA ESTÁ AQUI
     if (imageFile) {
       try {
+        // 1. Crie um objeto FormData
+        const uploadFormData = new FormData();
+        // 2. Adicione o arquivo com a chave "file", que é o que a API espera
+        uploadFormData.append("file", imageFile);
+
         const response = await fetch("/api/upload", {
           method: "POST",
-          body: imageFile,
+          // 3. Envie o objeto FormData no corpo da requisição
+          body: uploadFormData,
         });
+
         const result = await response.json();
         if (!response.ok) throw new Error(result.error || "Erro no upload");
         finalImageSrc = result.imageUrl;

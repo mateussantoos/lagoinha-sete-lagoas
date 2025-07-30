@@ -2,17 +2,33 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CalendarPlus, Edit, Trash2, X } from "lucide-react";
+import { CalendarPlus, Edit, Trash2, X, ImageIcon } from "lucide-react";
 import { EventoModal } from "@/components/admin/EventoModal";
 import Image from "next/image";
-import { ImageIcon } from "lucide-react";
+
+// Tipagem para os dados que vêm da API (com Timestamp)
+type ApiEvento = {
+  id: string;
+  title: string;
+  description: string;
+  date: {
+    seconds: number;
+    nanoseconds: number;
+  };
+  location: string;
+  imageSrc?: string;
+  ministerioId?: string | null;
+  ministerio?: Ministerio;
+};
 
 type Ministerio = { id: string; name: string };
+
+// Tipagem que o componente usa (com a data já convertida para string)
 type Evento = {
   id: string;
   title: string;
   description: string;
-  date: string;
+  date: string; // A data será uma string no formato ISO
   location: string;
   imageSrc?: string;
   ministerioId?: string | null;
@@ -27,11 +43,19 @@ export default function EventosPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
 
+  // A mudança principal está aqui
   const fetchData = async () => {
     setIsLoading(true);
     try {
       const eventosRes = await fetch("/api/eventos");
-      const eventosData = await eventosRes.json();
+      const apiEventosData: ApiEvento[] = await eventosRes.json();
+
+      // Mapeia os dados da API, convertendo o Timestamp para uma string ISO
+      const eventosData: Evento[] = apiEventosData.map((event) => ({
+        ...event,
+        date: new Date(event.date.seconds * 1000).toISOString(),
+      }));
+
       setEventos(eventosData);
     } catch (error) {
       console.error("Erro ao buscar dados", error);
@@ -45,26 +69,42 @@ export default function EventosPage() {
   }, []);
 
   const handleSaveEvent = async (eventoData: any) => {
+    // A lógica de salvar não precisa mudar, pois a API já espera uma string
+    // e a converte para Timestamp antes de salvar.
+    setIsSubmitting(true);
     const method = editingEvent ? "PUT" : "POST";
     const url = editingEvent
       ? `/api/eventos/${editingEvent.id}`
       : "/api/eventos";
-    const response = await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(eventoData),
-    });
-    if (!response.ok) throw new Error("Falha ao salvar evento.");
-    await fetchData();
-    setIsModalOpen(false);
+
+    try {
+      const response = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(eventoData),
+      });
+      if (!response.ok) throw new Error("Falha ao salvar evento.");
+      await fetchData();
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Erro ao salvar evento:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleDelete = async (evento: Evento) => {
-    const response = await fetch(`/api/eventos/${evento.id}`, {
-      method: "DELETE",
-    });
-    if (!response.ok) throw new Error("Falha ao deletar evento.");
-    await fetchData();
+    if (confirm(`Tem certeza que deseja deletar o evento "${evento.title}"?`)) {
+      try {
+        const response = await fetch(`/api/eventos/${evento.id}`, {
+          method: "DELETE",
+        });
+        if (!response.ok) throw new Error("Falha ao deletar evento.");
+        await fetchData();
+      } catch (error) {
+        console.error("Erro ao deletar evento:", error);
+      }
+    }
   };
 
   return (
@@ -107,7 +147,7 @@ export default function EventosPage() {
             <tbody>
               {isLoading ? (
                 <tr>
-                  <td colSpan={5} className="text-center p-8">
+                  <td colSpan={6} className="text-center p-8">
                     Carregando...
                   </td>
                 </tr>
@@ -155,10 +195,14 @@ export default function EventosPage() {
                             setEditingEvent(evento);
                             setIsModalOpen(true);
                           }}
+                          className="p-2 text-neutral-500 hover:text-primary transition-colors"
                         >
                           <Edit size={16} />
                         </button>
-                        <button onClick={() => handleDelete(evento)}>
+                        <button
+                          onClick={() => handleDelete(evento)}
+                          className="p-2 text-neutral-500 hover:text-red-500 transition-colors"
+                        >
                           <Trash2 size={16} />
                         </button>
                       </div>
@@ -189,7 +233,7 @@ export default function EventosPage() {
             onClick={() => setExpandedImage(null)}
           >
             <motion.div
-              layoutId={`event-image-${expandedImage}`} // Para uma animação mais avançada no futuro
+              layoutId={`event-image-${expandedImage}`}
               className="relative w-auto h-auto max-w-[90vw] max-h-[90vh]"
             >
               <Image

@@ -1,14 +1,14 @@
 import axios from "axios";
 import qs from "qs";
 
-const clientId = process.env.SPOTIFY_CLIENT_ID;
-const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-const showId = process.env.SPOTIFY_SHOW_ID;
+export const clientId = process.env.SPOTIFY_CLIENT_ID;
+export const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+export const showId = process.env.SPOTIFY_SHOW_ID;
 
 // Função para obter o token de acesso da API do Spotify
 async function getAccessToken(): Promise<string> {
   const res = await axios.post(
-    "https://accounts.spotify.com/api/token", // URL CORRETA AQUI
+    "https://accounts.spotify.com/api/token",
     qs.stringify({ grant_type: "client_credentials" }),
     {
       headers: {

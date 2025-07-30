@@ -1,53 +1,42 @@
-import { PrismaClient } from "@/generated/prisma/client";
 import { NextResponse } from "next/server";
+import { db } from "@/services/firebase";
+import { doc, updateDoc, deleteDoc, getDoc } from "firebase/firestore";
 import { Client } from "@googlemaps/google-maps-services-js";
 
-const prisma = new PrismaClient();
 const googleMapsClient = new Client({});
 
-// ATUALIZAR um GC
+// Função para ATUALIZAR um GC específico
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const id = params.id;
+    const id = context.params.id;
     const body = await request.json();
-    const { leaderIds, address, ...gcData } = body;
+    const { address, ...gcData } = body;
 
-    let locationData = {};
+    let dataToUpdate: any = { ...gcData, updatedAt: new Date().toISOString() };
 
     if (address) {
+      dataToUpdate.address = address;
       const geocodeResponse = await googleMapsClient.geocode({
         params: {
-          address: address,
+          address: `${address}, Sete Lagoas, MG`,
           key: process.env.Maps_API_KEY!,
         },
       });
       if (geocodeResponse.data.results[0]) {
         const location = geocodeResponse.data.results[0].geometry.location;
-        locationData = {
-          address,
-          latitude: location.lat,
-          longitude: location.lng,
-        };
+        dataToUpdate.latitude = location.lat;
+        dataToUpdate.longitude = location.lng;
       }
     }
 
-    const updatedGc = await prisma.gC.update({
-      where: { id },
-      data: {
-        ...gcData,
-        ...locationData,
-        leaders: leaderIds
-          ? { set: leaderIds.map((leaderId: string) => ({ id: leaderId })) }
-          : undefined,
-      },
-      include: {
-        leaders: true,
-      },
-    });
-    return NextResponse.json(updatedGc);
+    const docRef = doc(db, "gcs", id);
+    await updateDoc(docRef, dataToUpdate);
+
+    const updatedGc = await getDoc(docRef);
+    return NextResponse.json({ id: updatedGc.id, ...updatedGc.data() });
   } catch (error) {
     console.error("Erro ao atualizar GC:", error);
     return NextResponse.json(
@@ -57,16 +46,14 @@ export async function PUT(
   }
 }
 
-// DELETAR um GC
+// Função para DELETAR um GC específico
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const id = params.id;
-    await prisma.gC.delete({
-      where: { id },
-    });
+    const id = context.params.id;
+    await deleteDoc(doc(db, "gcs", id));
     return NextResponse.json({ message: "GC deletado com sucesso" });
   } catch (error) {
     console.error("Erro ao deletar GC:", error);

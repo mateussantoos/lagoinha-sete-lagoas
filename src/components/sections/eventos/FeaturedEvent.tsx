@@ -3,10 +3,19 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Calendar, MapPin } from "lucide-react";
 
-export const FeaturedEvent = ({ event }: { event: any }) => {
+type Evento = {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  location: string;
+  imageSrc?: string | null;
+};
+
+export const FeaturedEvent = ({ event }: { event: Evento | null }) => {
   if (!event) return null;
 
-  const formattedDate = new Date(event.date).toLocaleDateString("pt-BR", {
+  const formattedDate = new Date(event.date).toLocaleString("pt-BR", {
     day: "2-digit",
     month: "long",
     year: "numeric",
@@ -51,7 +60,7 @@ export const FeaturedEvent = ({ event }: { event: any }) => {
               <MapPin size={18} className="text-primary" /> {event.location}
             </p>
           </div>
-          <p className="font-lato text-neutral-500 dark:text-neutral-400 leading-relaxed mb-8">
+          <p className="font-lato text-neutral-500 dark:text-neutral-400 leading-relaxed mb-8 line-clamp-4">
             {event.description}
           </p>
         </motion.div>

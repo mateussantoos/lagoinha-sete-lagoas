@@ -1,12 +1,9 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
 import qs from "qs";
+import { clientId, clientSecret, showId } from "../../../services/spotify";
 
-const clientId = process.env.SPOTIFY_CLIENT_ID;
-const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-const showId = process.env.SPOTIFY_SHOW_ID;
-
-// Esta função agora será chamada apenas dentro desta rota
+// Esta função será chamada apenas dentro desta rota
 async function getAccessToken(): Promise<string> {
   const authString = Buffer.from(`${clientId}:${clientSecret}`).toString(
     "base64"
@@ -30,7 +27,7 @@ export async function GET() {
     const token = await getAccessToken();
 
     const response = await axios.get(
-      `https://api.spotify.com/v1/shows/${showId}/episodes?market=BR&limit=10`, // Adicionado limite de 10 episódios
+      `https://api.spotify.com/v1/shows/${showId}/episodes?market=BR&limit=10`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -43,7 +40,7 @@ export async function GET() {
       id: item.id,
       name: item.name,
       description: item.description,
-      thumbnail: item.images[0]?.url, // Pega a primeira imagem (geralmente a maior)
+      thumbnail: item.images[0]?.url,
       url: item.external_urls.spotify,
     }));
 

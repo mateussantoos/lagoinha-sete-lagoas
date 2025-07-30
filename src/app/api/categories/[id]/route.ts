@@ -1,22 +1,39 @@
-import { PrismaClient } from "@/generated/prisma/client";
 import { NextResponse } from "next/server";
+import { db } from "@/services/firebase";
+import {
+  doc,
+  updateDoc,
+  deleteDoc,
+  getDoc,
+  collection,
+  query,
+  where,
+  limit,
+  getDocs,
+} from "firebase/firestore";
 
-const prisma = new PrismaClient();
-
-// ATUALIZAR uma categoria
+// Função para ATUALIZAR uma categoria específica
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const id = params.id;
+    const id = context.params.id;
     const { name, description } = await request.json();
-    const updatedCategory = await prisma.categoriaProduto.update({
-      where: { id },
-      data: { name, description },
+
+    const docRef = doc(db, "productCategories", id);
+    await updateDoc(docRef, {
+      name,
+      description: description || null,
     });
-    return NextResponse.json(updatedCategory);
+
+    const updatedCategory = await getDoc(docRef);
+    return NextResponse.json({
+      id: updatedCategory.id,
+      ...updatedCategory.data(),
+    });
   } catch (error) {
+    console.error("Erro ao atualizar categoria:", error);
     return NextResponse.json(
       { error: "Erro ao atualizar categoria" },
       { status: 500 }
@@ -24,20 +41,23 @@ export async function PUT(
   }
 }
 
-// DELETAR uma categoria
+// Função para DELETAR uma categoria específica
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const id = params.id;
-    await prisma.categoriaProduto.delete({
-      where: { id },
-    });
-    return NextResponse.json({ message: "Categoria deletada com sucesso" });
-  } catch (error: any) {
-    // Se a categoria ainda tiver produtos, o Prisma retornará um erro
-    if (error.code === "P2003") {
+    const id = context.params.id;
+
+    // Verificação de segurança: checa se algum produto usa esta categoria
+    const q = query(
+      collection(db, "products"),
+      where("categoryIds", "array-contains", id),
+      limit(1)
+    );
+    const productsQuery = await getDocs(q);
+
+    if (!productsQuery.empty) {
       return NextResponse.json(
         {
           error:
@@ -46,6 +66,12 @@ export async function DELETE(
         { status: 409 }
       );
     }
+
+    await deleteDoc(doc(db, "productCategories", id));
+
+    return NextResponse.json({ message: "Categoria deletada com sucesso" });
+  } catch (error) {
+    console.error("Erro ao deletar categoria:", error);
     return NextResponse.json(
       { error: "Erro ao deletar categoria" },
       { status: 500 }

@@ -1,22 +1,37 @@
-import { PrismaClient } from "@/generated/prisma/client";
 import { NextResponse } from "next/server";
+import { db } from "@/services/firebase";
+import {
+  doc,
+  updateDoc,
+  deleteDoc,
+  getDoc,
+  collection,
+  query,
+  where,
+  limit,
+  getDocs,
+} from "firebase/firestore";
 
-const prisma = new PrismaClient();
-
-// ATUALIZAR um ministério
+// Função para ATUALIZAR um ministério específico
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const id = params.id;
+    const id = context.params.id;
     const body = await request.json();
 
-    const updatedMinisterio = await prisma.ministerio.update({
-      where: { id },
-      data: body,
+    const docRef = doc(db, "ministerios", id);
+    await updateDoc(docRef, {
+      ...body,
+      updatedAt: new Date().toISOString(),
     });
-    return NextResponse.json(updatedMinisterio);
+
+    const updatedMinisterio = await getDoc(docRef);
+    return NextResponse.json({
+      id: updatedMinisterio.id,
+      ...updatedMinisterio.data(),
+    });
   } catch (error) {
     console.error("Erro ao atualizar ministério:", error);
     return NextResponse.json(
@@ -26,19 +41,23 @@ export async function PUT(
   }
 }
 
-// DELETAR um ministério
+// Função para DELETAR um ministério específico
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const id = params.id;
-    await prisma.ministerio.delete({
-      where: { id },
-    });
-    return NextResponse.json({ message: "Ministério deletado com sucesso" });
-  } catch (error: any) {
-    if (error.code === "P2003") {
+    const id = context.params.id;
+
+    // Verificação de segurança: checa se algum evento usa este ministério
+    const q = query(
+      collection(db, "eventos"),
+      where("ministerioId", "==", id),
+      limit(1)
+    );
+    const eventosQuery = await getDocs(q);
+
+    if (!eventosQuery.empty) {
       return NextResponse.json(
         {
           error:
@@ -47,6 +66,11 @@ export async function DELETE(
         { status: 409 }
       );
     }
+
+    await deleteDoc(doc(db, "ministerios", id));
+
+    return NextResponse.json({ message: "Ministério deletado com sucesso" });
+  } catch (error) {
     console.error("Erro ao deletar ministério:", error);
     return NextResponse.json(
       { error: "Erro ao deletar ministério" },

@@ -1,14 +1,45 @@
-import { Sidebar } from "@/components/admin/Sidebar";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import jwt from "jsonwebtoken";
+import { jwtDecode } from "jwt-decode";
+import { Sidebar } from "@/components/admin/Sidebar";
+import { db } from "@/services/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
-// Tipagem para os dados do usuário dentro do token
-interface UserPayload {
+interface FirebaseJwtPayload {
+  user_id: string;
+  email: string;
+}
+
+export interface UserData {
   id: string;
   email: string;
   name: string;
-  role: string;
+  role: "ADMIN" | "MEMBER";
+}
+
+async function getUserDataFromFirestore(uid: string): Promise<UserData | null> {
+  try {
+    const userDocRef = doc(db, "users", uid);
+    const userDoc = await getDoc(userDocRef);
+
+    if (!userDoc.exists()) {
+      console.error(
+        `Documento de usuário não encontrado no Firestore para UID: ${uid}`
+      );
+      return null;
+    }
+
+    const data = userDoc.data();
+    return {
+      id: userDoc.id,
+      name: data.name,
+      email: data.email,
+      role: data.role,
+    };
+  } catch (error) {
+    console.error("Erro ao buscar dados do usuário no Firestore:", error);
+    return null;
+  }
 }
 
 export default async function AdminLayout({
@@ -16,29 +47,49 @@ export default async function AdminLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // --- LÓGICA DE PROTEÇÃO DE ROTA ---
-  const tokenCookie = (await cookies()).get("auth_token");
-  let userPayload: UserPayload | null = null;
+  const cookiesStore = await cookies();
+  const tokenCookie = cookiesStore.get("auth_token");
 
-  if (!tokenCookie) {
+  if (!tokenCookie?.value) {
     redirect("/login");
   }
+
+  let user: UserData | null = null;
 
   try {
-    const decoded = jwt.verify(tokenCookie.value, process.env.JWT_SECRET!);
-    userPayload = decoded as UserPayload;
-  } catch (error) {
-    console.error("Token inválido ou expirado:", error);
-    redirect("/login");
-  }
+    const decodedToken: FirebaseJwtPayload = jwtDecode(tokenCookie.value);
+    const uid = decodedToken.user_id;
 
-  if (!userPayload) {
+    if (!uid) {
+      throw new Error("UID não encontrado no token.");
+    }
+
+    user = await getUserDataFromFirestore(uid);
+
+    if (!user) {
+      console.error("Usuário autenticado mas sem registro no banco de dados.");
+      redirect("/login");
+    }
+
+    if (user.role !== "ADMIN") {
+      console.warn(
+        `Tentativa de acesso negada para o usuário: ${user.email} (Role: ${user.role})`
+      );
+      redirect("/login");
+    }
+  } catch (error) {
+    console.error(
+      "Token inválido ou expirado. Redirecionando para login.",
+      error
+    );
+    const cookiesStore = await cookies();
+    cookiesStore.set("auth_token", "", { expires: new Date(0), path: "/" });
     redirect("/login");
   }
 
   return (
     <div className="flex bg-stone-100 dark:bg-neutral-900 text-neutral-800 dark:text-neutral-100">
-      <Sidebar user={userPayload} />
+      <Sidebar user={user} />
       <main className="flex-grow p-8 overflow-auto h-screen">{children}</main>
     </div>
   );

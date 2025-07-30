@@ -1,26 +1,31 @@
-import { PrismaClient } from "@/generated/prisma/client";
 import { NextResponse } from "next/server";
+import { db } from "@/services/firebase";
+import { doc, updateDoc, deleteDoc, getDoc } from "firebase/firestore";
 
-const prisma = new PrismaClient();
-
-// ATUALIZAR um usuário
+// Função para ATUALIZAR um usuário específico
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
+    const id = context.params.id;
     const body = await request.json();
-    const id = params.id;
 
-    const { name, email, role } = body;
+    // Remove a senha do corpo para não atualizá-la acidentalmente
+    const { password, ...userData } = body;
 
-    const updatedUser = await prisma.user.update({
-      where: { id },
-      data: { name, email, role },
-      select: { id: true, name: true, email: true, role: true },
+    const docRef = doc(db, "users", id);
+    await updateDoc(docRef, {
+      ...userData,
+      updatedAt: new Date().toISOString(),
     });
-    return NextResponse.json(updatedUser);
+
+    const updatedUser = await getDoc(docRef);
+    const { password: _, ...userWithoutPassword } = updatedUser.data() as any;
+
+    return NextResponse.json({ id: updatedUser.id, ...userWithoutPassword });
   } catch (error) {
+    console.error("Erro ao atualizar usuário:", error);
     return NextResponse.json(
       { error: "Erro ao atualizar usuário" },
       { status: 500 }
@@ -28,21 +33,18 @@ export async function PUT(
   }
 }
 
-// DELETAR um usuário
+// Função para DELETAR um usuário específico
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const id = params.id;
-    await prisma.user.delete({
-      where: { id },
-    });
-    return NextResponse.json(
-      { message: "Usuário deletado com sucesso" },
-      { status: 200 }
-    );
+    const id = context.params.id;
+    // ATENÇÃO: Isso deleta o registro no Firestore, mas não o usuário no Firebase Auth.
+    await deleteDoc(doc(db, "users", id));
+    return NextResponse.json({ message: "Usuário deletado com sucesso" });
   } catch (error) {
+    console.error("Erro ao deletar usuário:", error);
     return NextResponse.json(
       { error: "Erro ao deletar usuário" },
       { status: 500 }

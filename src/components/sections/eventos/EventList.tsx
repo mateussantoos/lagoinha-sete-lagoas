@@ -3,7 +3,14 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
-const EventCard = ({ event }: { event: any }) => {
+type Evento = {
+  id: string;
+  title: string;
+  date: string;
+  imageSrc?: string | null;
+};
+
+const EventCard = ({ event }: { event: Evento }) => {
   const formattedDate = new Date(event.date).toLocaleDateString("pt-BR", {
     day: "2-digit",
     month: "short",
@@ -43,9 +50,9 @@ export const EventList = ({
   events,
 }: {
   title: string;
-  events: any[];
+  events: Evento[];
 }) => {
-  if (events.length === 0) return null;
+  if (!events || events.length === 0) return null;
 
   return (
     <section className="py-24 bg-stone-100 dark:bg-neutral-900">

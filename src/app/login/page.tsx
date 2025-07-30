@@ -5,7 +5,10 @@ import { motion, Variants } from "framer-motion";
 import { Mail, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import ImageLogin from "@/assets/webp/img02.webp";
+import { auth } from "@/services/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 // Variantes para a animação dos itens do formulário
 const formItemVariants: Variants = {
@@ -26,18 +29,39 @@ export default function LoginPage() {
     setError(null);
 
     try {
+      // ETAPA 1: Fazer login com o Firebase no navegador
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      // ETAPA 2: Pegar o token de ID do usuário logado
+      const idToken = await user.getIdToken();
+
+      // ETAPA 3: Enviar APENAS o token para a nossa API criar a sessão
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ token: idToken }), // Enviando o token
       });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Falha no login.");
 
-      // Se o login for bem-sucedido, redireciona para o painel de controle
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Falha ao criar a sessão no servidor.");
+      }
+
+      // Se tudo deu certo, redireciona para o painel
       router.push("/dashboard");
     } catch (err: any) {
-      setError(err.message);
+      // Trata erros comuns do Firebase
+      if (err.code === "auth/invalid-credential") {
+        setError("E-mail ou senha inválidos.");
+      } else {
+        setError(err.message || "Ocorreu um erro inesperado.");
+      }
+      console.error("Erro no login:", err);
     } finally {
       setIsLoading(false);
     }
@@ -77,7 +101,7 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="E-mail"
                 required
-                className="w-full pl-10 pr-4 py-3 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none dark:text-neutral-100"
+                className="w-full pl-10 pr-4 py-3 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none dark:text-neutral-200"
               />
             </motion.div>
 
@@ -89,7 +113,7 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Senha"
                 required
-                className="w-full pl-10 pr-4 py-3 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none dark:text-neutral-100"
+                className="w-full pl-10 pr-4 py-3 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none dark:text-neutral-200"
               />
             </motion.div>
 
@@ -105,11 +129,21 @@ export default function LoginPage() {
             >
               {isLoading ? "Entrando..." : "Entrar"}
             </motion.button>
+
+            <motion.p
+              variants={formItemVariants}
+              className="text-center text-sm font-lato text-neutral-600 dark:text-neutral-400"
+            >
+              Voltar para tela principal?{" "}
+              <Link href="/" className="font-bold text-primary hover:underline">
+                Clique aqui
+              </Link>
+            </motion.p>
           </motion.form>
         </motion.div>
       </div>
 
-      {/* --- COLUNA DIREITA: IMAGEM (visível apenas em telas grandes) --- */}
+      {/* --- COLUNA DIREITA: IMAGEM --- */}
       <div className="hidden lg:block relative">
         <Image
           src={ImageLogin}

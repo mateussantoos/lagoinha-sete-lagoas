@@ -137,7 +137,7 @@ export const Banner = () => {
               em Sete Lagoas e no mundo.
             </motion.p>
             <motion.div className="mt-4 md:mt-8" variants={textItemVariants}>
-              <Button href="#contato" text="Participe Conosco" arrow={false} />
+              <Button href="/contato" text="Participe Conosco" arrow={false} />
             </motion.div>
           </motion.div>
         </div>

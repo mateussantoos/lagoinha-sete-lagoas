@@ -6,24 +6,63 @@ import { ProductCard } from "./ProductCard";
 import { ProductDetailModal } from "./ProductDetailModal";
 import { Search, ChevronDown } from "lucide-react";
 
-export const ProductList = ({
-  products,
-  categories,
-}: {
-  products: any[];
-  categories: any[];
-}) => {
-  // --- ESTADOS DOS FILTROS ---
+// Tipagem para os dados que esperamos da API
+type Product = {
+  id: string;
+  name: string;
+  price: number;
+  sku: string;
+  description: string;
+  isOnSale: boolean;
+  discountPercentage?: number | null;
+  stock: number;
+  imageSrc?: string | null;
+  categoryIds: string[];
+  categories: Category[];
+};
+
+type Category = {
+  id: string;
+  name: string;
+};
+
+export const ProductList = () => {
+  // --- ESTADOS DE DADOS E FILTROS ---
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("default");
 
-  const [filteredProducts, setFilteredProducts] = useState(products);
-  const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+  // --- BUSCA INICIAL DE DADOS ---
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [productsRes, categoriesRes] = await Promise.all([
+          fetch("/api/products"),
+          fetch("/api/categories"),
+        ]);
+        const productsData = await productsRes.json();
+        const categoriesData = await categoriesRes.json();
+        setAllProducts(productsData);
+        setCategories(categoriesData);
+      } catch (error) {
+        console.error("Erro ao buscar dados da bookstore:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   // --- LÓGICA DE FILTRAGEM COMBINADA ---
   useEffect(() => {
-    let tempProducts = [...products];
+    let tempProducts = [...allProducts];
 
     if (selectedCategory !== "all") {
       tempProducts = tempProducts.filter((product) =>
@@ -44,7 +83,7 @@ export const ProductList = ({
     }
 
     setFilteredProducts(tempProducts);
-  }, [selectedCategory, searchTerm, sortOrder, products]);
+  }, [selectedCategory, searchTerm, sortOrder, allProducts]);
 
   const FilterButton = ({
     categoryId,
@@ -68,7 +107,7 @@ export const ProductList = ({
   return (
     <>
       <div>
-        {/* --- NOVA BARRA DE FILTROS AVANÇADOS --- */}
+        {/* --- barra de pesquisa --- */}
         <div className="mb-12 p-4 bg-stone-100 dark:bg-neutral-900 rounded-lg">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
             {/* Campo de Busca */}
@@ -107,18 +146,24 @@ export const ProductList = ({
         </div>
 
         {/* Grid de Produtos */}
-        <motion.div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {filteredProducts.map((product, index) => (
-            <motion.div key={product.id}>
-              <ProductCard
-                product={product}
-                onClick={() => setSelectedProduct(product)}
-              />
-            </motion.div>
-          ))}
-        </motion.div>
+        {isLoading ? (
+          <p className="text-center font-lato text-neutral-500">
+            Carregando produtos...
+          </p>
+        ) : (
+          <motion.div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-8">
+            {filteredProducts.map((product, index) => (
+              <motion.div key={product.id}>
+                <ProductCard
+                  product={product}
+                  onClick={() => setSelectedProduct(product)}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
 
-        {filteredProducts.length === 0 && (
+        {!isLoading && filteredProducts.length === 0 && (
           <div className="text-center py-16">
             <p className="font-lato text-neutral-500">
               Nenhum produto encontrado com os filtros selecionados.

@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
+// A lógica de logout permanece a mesma, pois ela apenas manipula o cookie.
 export async function GET() {
   try {
     (await cookies()).set("auth_token", "", {
