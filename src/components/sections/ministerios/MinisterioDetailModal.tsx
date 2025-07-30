@@ -21,14 +21,23 @@ export const MinisterioDetailModal = ({
         className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
         onClick={onClose}
       >
+        {/* Botão de fechar agora está dentro do modal, no canto superior direito da caixa */}
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           transition={{ duration: 0.4, ease: "easeInOut" }}
-          className="bg-white dark:bg-neutral-900 rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col lg:flex-row"
+          className="relative bg-white dark:bg-neutral-900 rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col lg:flex-row"
           onClick={(e) => e.stopPropagation()}
         >
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 text-neutral-500 hover:text-primary transition-colors z-20 cursor-pointer"
+            aria-label="Fechar"
+            type="button"
+          >
+            <X size={24} />
+          </button>
           <div className="w-full lg:w-1/2 relative aspect-video lg:aspect-auto">
             <Image
               src={ministerio.imageSrc || "/images/placeholder.png"}
@@ -39,12 +48,6 @@ export const MinisterioDetailModal = ({
           </div>
 
           <div className="w-full lg:w-1/2 p-8 flex flex-col overflow-y-auto">
-            <button
-              onClick={onClose}
-              className="absolute top-4 right-4 text-neutral-500 hover:text-primary transition-colors z-10"
-            >
-              <X size={24} />
-            </button>
             <h2 className="font-bebas text-4xl lg:text-5xl text-neutral-800 dark:text-neutral-100">
               {ministerio.name}
             </h2>

@@ -41,10 +41,10 @@ export const ProductDetailModal = ({
           </div>
 
           {/* Coluna de Detalhes */}
-          <div className="w-full lg:w-1/2 p-8 flex flex-col overflow-y-auto">
+          <div className="w-full lg:w-1/2 p-8 flex flex-col overflow-y-auto relative">
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 text-neutral-500 hover:text-primary transition-colors z-10"
+              className="absolute top-4 right-4 text-neutral-500 hover:text-primary transition-colors z-10 cursor-pointer"
             >
               <X size={24} />
             </button>
