@@ -10,6 +10,7 @@ import {
 import { ThemeScript } from "@/providers/ThemeProvider";
 import "./globals.css";
 import { SmoothScroll } from "@/utils/SmoothScroll";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -67,6 +68,7 @@ export default function RootLayout({
         className={`bg-white dark:bg-black ${geistSans.variable} ${geistMono.variable} ${lato.variable} ${bebasNeue.variable} ${crimsonText.variable} ${crimsonPro.variable} antialiased`}
       >
         <SmoothScroll />
+        <SpeedInsights />
         {children}
       </body>
     </html>
