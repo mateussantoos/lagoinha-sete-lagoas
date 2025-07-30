@@ -48,6 +48,9 @@ const crimsonPro = Crimson_Pro({
 export const metadata: Metadata = {
   title: "Lagoinha Sete Lagoas",
   description: "Igreja Batista da Lagoinha em Sete Lagoas",
+  icons: {
+    icon: "./favicon.ico",
+  },
 };
 
 export default function RootLayout({
