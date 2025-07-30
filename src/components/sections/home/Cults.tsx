@@ -74,7 +74,7 @@ export const Cults = () => {
               adorar a Deus conosco. Encontre um horário e venha nos visitar.
             </motion.p>
             <motion.div variants={textVariants} className="mt-8">
-              <Button href="#contato" text="Como Chegar" arrow={true} />
+              <Button href="sobre/#mapa" text="Como Chegar" arrow={true} />
             </motion.div>
           </div>
 

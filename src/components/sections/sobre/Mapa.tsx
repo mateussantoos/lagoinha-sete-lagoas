@@ -14,7 +14,7 @@ const localizacao = {
 
 export const Mapa = () => {
   return (
-    <section className="py-24 bg-white dark:bg-black">
+    <section className="py-24 bg-white dark:bg-black" id="mapa">
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
