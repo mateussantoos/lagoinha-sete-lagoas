@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/services/firebase";
 import {
   doc,
@@ -10,21 +10,38 @@ import {
   where,
   limit,
   getDocs,
+  Timestamp,
 } from "firebase/firestore";
 
 // Função para ATUALIZAR uma categoria específica
 export async function PUT(
-  request: Request,
-  context: { params: { id: string } }
+  request: NextRequest // <-- MUDANÇA: Apenas o request é necessário
 ) {
   try {
-    const id = context.params.id;
+    // NOVA ABORDAGEM: Extrai o ID diretamente da URL
+    const id = request.nextUrl.pathname.split("/").pop();
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "ID da categoria ausente." },
+        { status: 400 }
+      );
+    }
+
     const { name, description } = await request.json();
+
+    if (!name) {
+      return NextResponse.json(
+        { error: "O nome da categoria é obrigatório." },
+        { status: 400 }
+      );
+    }
 
     const docRef = doc(db, "productCategories", id);
     await updateDoc(docRef, {
       name,
       description: description || null,
+      updatedAt: Timestamp.now(),
     });
 
     const updatedCategory = await getDoc(docRef);
@@ -35,7 +52,7 @@ export async function PUT(
   } catch (error) {
     console.error("Erro ao atualizar categoria:", error);
     return NextResponse.json(
-      { error: "Erro ao atualizar categoria" },
+      { error: "Erro interno ao atualizar categoria" },
       { status: 500 }
     );
   }
@@ -43,11 +60,18 @@ export async function PUT(
 
 // Função para DELETAR uma categoria específica
 export async function DELETE(
-  request: Request,
-  context: { params: { id: string } }
+  request: NextRequest // <-- MUDANÇA: Apenas o request é necessário
 ) {
   try {
-    const id = context.params.id;
+    // NOVA ABORDAGEM: Extrai o ID diretamente da URL
+    const id = request.nextUrl.pathname.split("/").pop();
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "ID da categoria ausente." },
+        { status: 400 }
+      );
+    }
 
     // Verificação de segurança: checa se algum produto usa esta categoria
     const q = query(
@@ -63,7 +87,7 @@ export async function DELETE(
           error:
             "Não é possível deletar. Esta categoria ainda possui produtos vinculados.",
         },
-        { status: 409 }
+        { status: 409 } // Status 409 Conflict é mais apropriado aqui
       );
     }
 
@@ -73,7 +97,7 @@ export async function DELETE(
   } catch (error) {
     console.error("Erro ao deletar categoria:", error);
     return NextResponse.json(
-      { error: "Erro ao deletar categoria" },
+      { error: "Erro interno ao deletar categoria" },
       { status: 500 }
     );
   }

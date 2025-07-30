@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/services/firebase";
 import {
   doc,
@@ -10,11 +10,19 @@ import {
 
 // Função para ATUALIZAR um evento específico
 export async function PUT(
-  request: Request,
-  context: { params: { id: string } }
+  request: NextRequest // <-- MUDANÇA: Apenas o request é necessário
 ) {
   try {
-    const id = context.params.id;
+    // NOVA ABORDAGEM: Extrai o ID diretamente da URL
+    const id = request.nextUrl.pathname.split("/").pop();
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "ID do evento ausente." },
+        { status: 400 }
+      );
+    }
+
     const body = await request.json();
     const { date, ...eventData } = body;
 
@@ -30,7 +38,7 @@ export async function PUT(
   } catch (error) {
     console.error("Erro ao atualizar evento:", error);
     return NextResponse.json(
-      { error: "Erro ao atualizar evento" },
+      { error: "Erro interno ao atualizar evento" },
       { status: 500 }
     );
   }
@@ -38,17 +46,25 @@ export async function PUT(
 
 // Função para DELETAR um evento específico
 export async function DELETE(
-  request: Request,
-  context: { params: { id: string } }
+  request: NextRequest // <-- MUDANÇA: Apenas o request é necessário
 ) {
   try {
-    const id = context.params.id;
+    // NOVA ABORDAGEM: Extrai o ID diretamente da URL
+    const id = request.nextUrl.pathname.split("/").pop();
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "ID do evento ausente." },
+        { status: 400 }
+      );
+    }
+
     await deleteDoc(doc(db, "eventos", id));
     return NextResponse.json({ message: "Evento deletado com sucesso" });
   } catch (error) {
     console.error("Erro ao deletar evento:", error);
     return NextResponse.json(
-      { error: "Erro ao deletar evento" },
+      { error: "Erro interno ao deletar evento" },
       { status: 500 }
     );
   }

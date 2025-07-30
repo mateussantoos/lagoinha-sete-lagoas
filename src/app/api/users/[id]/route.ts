@@ -1,14 +1,28 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/services/firebase";
-import { doc, updateDoc, deleteDoc, getDoc } from "firebase/firestore";
+import {
+  doc,
+  updateDoc,
+  deleteDoc,
+  getDoc,
+  Timestamp,
+} from "firebase/firestore";
 
 // Função para ATUALIZAR um usuário específico
 export async function PUT(
-  request: Request,
-  context: { params: { id: string } }
+  request: NextRequest // <-- MUDANÇA: Apenas o request é necessário
 ) {
   try {
-    const id = context.params.id;
+    // NOVA ABORDAGEM: Extrai o ID diretamente da URL
+    const id = request.nextUrl.pathname.split("/").pop();
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "ID do usuário ausente." },
+        { status: 400 }
+      );
+    }
+
     const body = await request.json();
 
     // Remove a senha do corpo para não atualizá-la acidentalmente
@@ -17,17 +31,20 @@ export async function PUT(
     const docRef = doc(db, "users", id);
     await updateDoc(docRef, {
       ...userData,
-      updatedAt: new Date().toISOString(),
+      updatedAt: Timestamp.now(), // <-- MUDANÇA: Usando Timestamp
     });
 
-    const updatedUser = await getDoc(docRef);
-    const { password: _, ...userWithoutPassword } = updatedUser.data() as any;
+    const updatedUserDoc = await getDoc(docRef);
+    const updatedUser = { id: updatedUserDoc.id, ...updatedUserDoc.data() };
 
-    return NextResponse.json({ id: updatedUser.id, ...userWithoutPassword });
+    // Remove a senha do retorno por segurança, caso ela exista
+    delete (updatedUser as any).password;
+
+    return NextResponse.json(updatedUser);
   } catch (error) {
     console.error("Erro ao atualizar usuário:", error);
     return NextResponse.json(
-      { error: "Erro ao atualizar usuário" },
+      { error: "Erro interno ao atualizar usuário" },
       { status: 500 }
     );
   }
@@ -35,18 +52,26 @@ export async function PUT(
 
 // Função para DELETAR um usuário específico
 export async function DELETE(
-  request: Request,
-  context: { params: { id: string } }
+  request: NextRequest // <-- MUDANÇA: Apenas o request é necessário
 ) {
   try {
-    const id = context.params.id;
+    // NOVA ABORDAGEM: Extrai o ID diretamente da URL
+    const id = request.nextUrl.pathname.split("/").pop();
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "ID do usuário ausente." },
+        { status: 400 }
+      );
+    }
+
     // ATENÇÃO: Isso deleta o registro no Firestore, mas não o usuário no Firebase Auth.
     await deleteDoc(doc(db, "users", id));
     return NextResponse.json({ message: "Usuário deletado com sucesso" });
   } catch (error) {
     console.error("Erro ao deletar usuário:", error);
     return NextResponse.json(
-      { error: "Erro ao deletar usuário" },
+      { error: "Erro interno ao deletar usuário" },
       { status: 500 }
     );
   }

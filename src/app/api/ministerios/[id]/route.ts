@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/services/firebase";
 import {
   doc,
@@ -10,21 +10,30 @@ import {
   where,
   limit,
   getDocs,
+  Timestamp,
 } from "firebase/firestore";
 
 // Função para ATUALIZAR um ministério específico
 export async function PUT(
-  request: Request,
-  context: { params: { id: string } }
+  request: NextRequest // <-- MUDANÇA: Apenas o request é necessário
 ) {
   try {
-    const id = context.params.id;
+    // NOVA ABORDAGEM: Extrai o ID diretamente da URL
+    const id = request.nextUrl.pathname.split("/").pop();
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "ID do ministério ausente." },
+        { status: 400 }
+      );
+    }
+
     const body = await request.json();
 
     const docRef = doc(db, "ministerios", id);
     await updateDoc(docRef, {
       ...body,
-      updatedAt: new Date().toISOString(),
+      updatedAt: Timestamp.now(), // <-- MUDANÇA: Usando Timestamp
     });
 
     const updatedMinisterio = await getDoc(docRef);
@@ -35,7 +44,7 @@ export async function PUT(
   } catch (error) {
     console.error("Erro ao atualizar ministério:", error);
     return NextResponse.json(
-      { error: "Erro ao atualizar ministério" },
+      { error: "Erro interno ao atualizar ministério" },
       { status: 500 }
     );
   }
@@ -43,11 +52,18 @@ export async function PUT(
 
 // Função para DELETAR um ministério específico
 export async function DELETE(
-  request: Request,
-  context: { params: { id: string } }
+  request: NextRequest // <-- MUDANÇA: Apenas o request é necessário
 ) {
   try {
-    const id = context.params.id;
+    // NOVA ABORDAGEM: Extrai o ID diretamente da URL
+    const id = request.nextUrl.pathname.split("/").pop();
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "ID do ministério ausente." },
+        { status: 400 }
+      );
+    }
 
     // Verificação de segurança: checa se algum evento usa este ministério
     const q = query(
@@ -73,7 +89,7 @@ export async function DELETE(
   } catch (error) {
     console.error("Erro ao deletar ministério:", error);
     return NextResponse.json(
-      { error: "Erro ao deletar ministério" },
+      { error: "Erro interno ao deletar ministério" },
       { status: 500 }
     );
   }

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/services/firebase";
 import {
   doc,
@@ -10,22 +10,31 @@ import {
   where,
   limit,
   getDocs,
+  Timestamp,
 } from "firebase/firestore";
 
 // Função para ATUALIZAR um líder específico
 export async function PUT(
-  request: Request,
-  context: { params: { id: string } }
+  request: NextRequest // <-- MUDANÇA: Apenas o request é necessário
 ) {
   try {
-    const id = context.params.id;
+    // NOVA ABORDAGEM: Extrai o ID diretamente da URL
+    const id = request.nextUrl.pathname.split("/").pop();
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "ID do líder ausente." },
+        { status: 400 }
+      );
+    }
+
     const { name, phone } = await request.json();
 
     const docRef = doc(db, "leaders", id);
     await updateDoc(docRef, {
       name,
       phone,
-      updatedAt: new Date().toISOString(),
+      updatedAt: Timestamp.now(), // <-- MUDANÇA: Usando Timestamp
     });
 
     const updatedLeader = await getDoc(docRef);
@@ -33,7 +42,7 @@ export async function PUT(
   } catch (error) {
     console.error("Erro ao atualizar líder:", error);
     return NextResponse.json(
-      { error: "Erro ao atualizar líder" },
+      { error: "Erro interno ao atualizar líder" },
       { status: 500 }
     );
   }
@@ -41,11 +50,18 @@ export async function PUT(
 
 // Função para DELETAR um líder específico
 export async function DELETE(
-  request: Request,
-  context: { params: { id: string } }
+  request: NextRequest // <-- MUDANÇA: Apenas o request é necessário
 ) {
   try {
-    const id = context.params.id;
+    // NOVA ABORDAGEM: Extrai o ID diretamente da URL
+    const id = request.nextUrl.pathname.split("/").pop();
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "ID do líder ausente." },
+        { status: 400 }
+      );
+    }
 
     // Verificação de segurança: checa se algum GC usa este líder
     const q = query(
@@ -71,7 +87,7 @@ export async function DELETE(
   } catch (error) {
     console.error("Erro ao deletar líder:", error);
     return NextResponse.json(
-      { error: "Erro ao deletar líder" },
+      { error: "Erro interno ao deletar líder" },
       { status: 500 }
     );
   }
