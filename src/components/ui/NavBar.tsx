@@ -164,7 +164,7 @@ export const Navbar = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="absolute left-0 right-0 mt-2 mx-4 sm:mx-6 lg:mx-8 bg-white/95 dark:bg-black/95 backdrop-blur-lg shadow-lg rounded-3xl lg:hidden"
+              className="absolute left-0 right-0 mt-2 mx-4 sm:mx-6 lg:mx-8 bg-white/95 dark:bg-black/95 backdrop-blur-lg shadow-lg rounded-3xl lg:hidden border border-neutral-200/80 dark:border-neutral-800/80"
             >
               <ul className="flex flex-col space-y-4 p-6 font-bebas text-lg tracking-widest text-neutral-800 dark:text-neutral-100">
                 {sections.map((sec) => (
