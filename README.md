@@ -4,7 +4,7 @@ Este é o repositório oficial do site da **Igreja Batista da Lagoinha Sete Lago
 
 ## ✨ Tecnologias Utilizadas
 
-- ⚛️ React + Vite
+- ⚛️ NextJS
 - 🟦 TypeScript
 - 🎨 Tailwind CSS
 - 🔥 Firebase (backend)
@@ -25,7 +25,7 @@ Este é o repositório oficial do site da **Igreja Batista da Lagoinha Sete Lago
 1. **Clone o repositório**
 
 ```bash
-git clone https://github.com/mateussantoos/lagoinhasetelagoas.git
+git clone https://github.com/mateussantoos/lagoinha-sete-lagoas.git
 cd lagoinhasetelagoas
 ```
 

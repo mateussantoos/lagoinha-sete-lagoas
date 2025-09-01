@@ -60,9 +60,9 @@ export const AboutUs = () => {
               className="font-lato text-gray-800 dark:text-gray-300 leading-snug text-base md:text-lg tracking-wide max-w-lg mx-auto lg:mx-0 mb-8 text-justify lg:text-left"
               variants={itemVariants}
             >
-              Somos uma extensão da Igreja Batista da Lagoinha, um lugar para
-              todos. Nosso coração queima para servir Sete Lagoas, espalhando o
-              amor e a esperança de Jesus em cada rua e em cada lar.
+              Somos a Igreja Batista da Lagoinha, um lugar para todos. Nosso
+              coração queima para servir Sete Lagoas, espalhando o amor e a
+              esperança de Jesus em cada rua e em cada lar.
             </motion.p>
             <motion.p
               className="font-lato text-gray-800 dark:text-gray-300 leading-snug text-base md:text-lg tracking-wide max-w-lg mx-auto lg:mx-0 mb-8 text-justify lg:text-left"
@@ -74,7 +74,7 @@ export const AboutUs = () => {
             </motion.p>
 
             <motion.div variants={itemVariants}>
-              <Button href="#contato" text="Nossa História" />
+              <Button href="/sobre" text="Nossa História" />
             </motion.div>
           </div>
 
